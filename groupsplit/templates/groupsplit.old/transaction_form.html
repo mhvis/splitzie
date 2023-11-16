@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li><a href="{% url "group-list" %}">Lists</a></li>
+        <li><a href="{% url "group-detail" pk=object.pk %}">{{ object.name }}</a></li>
+        <li class="active">New transaction</li>
+    </ol>
+    <h1>Choose transaction type</h1>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Expense or income</h3>
+        </div>
+        <div class="panel-body">
+            Panel content
+        </div>
+    </div>
+    <div class="panel panel-default" style="position: relative;">
+        <div class="panel-heading">
+            <h3 class="panel-title">Custom</h3>
+        </div>
+        <div class="panel-body">
+            Enter custom balance adjustments.
+            <a href="{% url "transaction-create-custom" pk=object.pk %}" class="btn btn-default stretched-link">Choose</a>
+        </div>
+    </div>
+
+    <a href="{% url "transaction-create-custom" pk=object.pk %}" class="btn btn-default">Expense or income</a>
+    <a href="{% url "transaction-create-custom" pk=object.pk %}" class="btn btn-default">Custom</a>
+
+    <h4>Transaction type</h4>
+    <ul class="nav nav-pills">
+        <li class="active"><a href="#type-payment" data-toggle="pill">Payment</a></li>
+        <li><a href="#type-receive" data-toggle="pill">Receive</a></li>
+        <li><a href="#type-settle" data-toggle="pill">Settle</a></li>
+        <li><a href="#type-custom" data-toggle="pill">Custom</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="type-payment">
+            <h4>Payment</h4>
+            <p>Divide an expense over the group.</p>
+
+
+        </div>
+        <div class="tab-pane" id="type-receive">
+            <h4>Receive</h4>
+            <p>Divide income over the group.</p>
+        </div>
+        <div class="tab-pane" id="type-settle">
+            <h4>Settle</h4>
+            <p>Resolve balance differences within the group.</p>
+        </div>
+        <div class="tab-pane" id="type-custom">
+            <h4>Custom</h4>
+            <p>Enter a custom balance adjustment.</p>
+            <p><em>All amounts together must always sum to zero!</em></p>
+        </div>
+    </div>
+    <form method="post" action="{% url "transaction-create" pk=object.pk %}" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form form layout="horizontal" horizontal_label_class="col-sm-2" horizontal_field_class="col-sm-10" %}
+        {% bootstrap_formset formset layout="horizontal" horizontal_label_class="col-sm-2" horizontal_field_class="col-sm-10" %}
+        {#        {{ formset.as_div }}#}
+        {#        {{ formset.errors }}#}
+        {#        {{ formset.non_form_errors }}#}
+        <button type="submit" class="btn btn-default">Save</button>
+    </form>
+{% endblock %}

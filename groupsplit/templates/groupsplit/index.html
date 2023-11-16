@@ -1,0 +1,23 @@
+{% extends "groupsplit/base.html" %}
+
+{% block content %}
+    {% include 'groupsplit/snippets/group_store.html' %}
+    <p>
+        Easily divide group expenses over all participants.
+        No account required.
+        Works for any type of expenses, income and settlements between group participants.
+    </p>
+    <button hx-post="{% url 'group-create' %}" hx-target="body">
+        Get started
+    </button>
+
+    <h2>Why is this app better than WieBetaaltWat?</h2>
+    <ul>
+        <li>We support partial settlements between a subset of group participants.</li>
+        <li>
+            We do not push a payment system for settling.
+            Just pay the others using your own familiar banking app, or with cash.
+        </li>
+{#        <li>This website does not require JavaScript to function (but it does make it better).</li>#}
+    </ul>
+{% endblock %}

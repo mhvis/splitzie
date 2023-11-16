@@ -1,0 +1,88 @@
+{% extends 'groupsplit/base.html' %}
+{% load currency %}
+
+{% block content %}
+    <a href="{% url 'group' code=group.code %}" hx-boost="true">Done</a>
+    <h2>Balance</h2>
+    <ul>
+        {% for p in group.participants.all %}
+            <li>{{ p.name }}: {{ p.balance|euro }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Settle</h2>
+    <ul id="moves">
+
+    </ul>
+
+    <h4>Enter repay</h4>
+    <p>
+        Enter any repayments made using the form below.
+    </p>
+
+    <form method="post" action="{% url 'group-settle' code=group.code %}" hx-boost="true" hx-push-url="false">
+        {% csrf_token %}
+        <label>
+            <select name="debtor" required onchange="
+                    const creditorSelect = document.querySelector('select[name=creditor]');
+                    creditorSelect.querySelector('option[disabled]').disabled = false;
+                    creditorSelect.querySelector(`option[value='${this.value}']`).disabled = true;
+                    if (creditorSelect.value === this.value) {
+                        creditorSelect.value = creditorSelect.querySelector('option:not([disabled])').value;
+                    }">
+                {% for p in group.participants.all %}
+                    <option value="{{ p.pk }}">{{ p.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            repaid
+            <input type="number" step="0.01" required placeholder="0.00" min="0.01" max="99999.99" name="amount">
+        </label>
+
+        <label>
+            to
+            <select name="creditor" required>
+                {% for p in group.participants.all %}
+                    <option value="{{ p.pk }}"{% if forloop.first %} disabled{% endif %}>{{ p.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <button type="submit">Confirm</button>
+        {{ form.non_field_errors }}
+        {{ form.source.errors }}
+        {{ form.target.errors }}
+        {{ form.amount.errors }}
+    </form>
+
+
+
+    {% include 'groupsplit/snippets/settler.html' %}
+    <script>
+        htmx.onLoad(function (content) {
+            const participants = {
+            {% for p in group.participants.all %}
+                {{ p.pk }}: '{{ p.name|escapejs }}',
+            {% endfor %}
+            };
+            const settler = new Settler([
+                {% for p in group.participants.all %}
+                    {'id': {{ p.pk }}, 'balance': {{ p.balance|cents }}},
+                {% endfor %}
+            ]);
+            // Display moves
+            document.getElementById('moves').innerHTML = settler.getMoves().map(
+                (x) =>
+`<li>
+    ${participants[x.from]} pays ${Settler.euroFormat(x.amount)} to ${participants[x.to]}
+    <button type="button" onclick="
+            document.querySelector('select[name=debtor]').value= '${x.from}';
+            document.querySelector('select[name=creditor]').value= '${x.to}';
+            document.querySelector('input[name=amount]').value = '${(x.amount / 100).toFixed(2)}';">
+        Enter
+    </button>
+</li>`
+            ).join('');
+        });
+    </script>
+{% endblock %}

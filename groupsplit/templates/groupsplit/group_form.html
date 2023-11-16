@@ -1,0 +1,63 @@
+{% extends "groupsplit/base.html" %}
+
+{% block content %}
+    <h1>Edit group</h1>
+    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true" hx-target="#nameResponse">
+        {% csrf_token %}
+        <label>
+            Name:
+            <input type="text" maxlength="150" name="name" value="{{ group.name }}">
+        </label>
+        <button type="submit" name="form" value="name">Save</button>
+        <div id="nameResponse"></div>
+    </form>
+    <h4>Participants</h4>
+    <ul>
+        {% for participant in group.participants.all %}
+            <li>
+                {{ participant.name }}
+                {% if not participant.entries.exists and not participant.expenses.exists %}
+                    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true">
+                        {% csrf_token %}
+                        <input type="hidden" name="participant" value="{{ participant.pk }}">
+                        <button type="submit" name="form" value="participant-delete">Remove</button>
+                    </form>
+                {% endif %}
+            </li>
+
+        {% endfor %}
+    </ul>
+    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true">
+        <label>
+            Add participant:
+            <input type="text" maxlength="150" name="name" required
+                   {% if request.POST.form == 'participant-create' %}autofocus{% endif %}>
+        </label>
+        <button type="submit" name="form" value="participant-create">Add</button>
+    </form>
+
+    <h4>E-mails</h4>
+    <p>
+        Linked e-mails receive a notification when a payment was added.
+        They can also be used to recover access to the group page when the URL is lost.
+    </p>
+    <ul>
+        {% for email in group.emails.all %}
+            <li>{{ email.email }}</li>
+            <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true">
+                {% csrf_token %}
+                <input type="hidden" name="email" value="{{ email.pk }}">
+                <button type="submit" name="form" value="email-delete">Remove</button>
+            </form>
+        {% endfor %}
+    </ul>
+        <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true">
+        <label>
+            Add e-mail address:
+            <input type="email" maxlength="150" name="email" placeholder="mail@example.com" required>
+        </label>
+        <button type="submit" name="form" value="email-create">Add</button>
+    </form>
+
+    <a href="{% url 'group' code=group.code %}" hx-boost="true">Done</a>
+{% endblock %}

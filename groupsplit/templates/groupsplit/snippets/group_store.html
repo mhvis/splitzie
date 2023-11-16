@@ -1,0 +1,67 @@
+<div>
+    <h2>Your groups</h2>
+    <ul id="groupList" hx-boost="true"></ul>
+</div>
+<script>
+    function getGroupStore() {
+        /**
+         * The group store has key: value pairs in the form "<code>": {"name": "<name>"}.
+         */
+        return JSON.parse(localStorage.getItem("groupStore") || '{}');
+    }
+
+    function saveGroupStore(groupStore) {
+        localStorage.setItem("groupStore", JSON.stringify(groupStore));
+    }
+
+    function insertGroupList(groupStore) {
+        // Generates group list HTML and inserts it into the DOM.
+        const el = document.getElementById("groupList");
+
+        // Collect and sort entries
+        const entries = Object.entries(groupStore).map((a) => ({"code": a[0], "name": a[1].name})).sort((a, b) => {
+            const nameA = a.name.toUpperCase();
+            const nameB = b.name.toUpperCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        });
+
+        // Construct list items and insert into DOM
+        el.innerHTML = entries.map((a) => `<li>
+        <a href="${"{% url 'group' code='CODE' %}".replace("CODE", a.code)}">${a.name}</a>
+        <button onclick='deleteGroupStoreItem("${a.code}", true, true)'>Leave</button>
+        </li>`).join("");
+    }
+
+    function deleteGroupStoreItem(code, confirm, updateDOM) {
+        if (confirm) {
+            const msg = "Are you sure you want to delete this group entry? " +
+                "You will need the full URL to access the group again.";
+            if (!window.confirm(msg)) {
+                return;
+            }
+        }
+        const groupStore = getGroupStore();
+        delete groupStore[code];
+        saveGroupStore(groupStore);
+        if (updateDOM) {
+            insertGroupList(groupStore);
+        }
+    }
+
+    {
+        // On page load, add current group and populate the group list.
+        const groupStore = getGroupStore();
+        {% if group %}
+            // Add current group and save
+            groupStore["{{ group.code }}"] = {"name": "{{ group.name|escapejs }}"};
+            saveGroupStore(groupStore);
+        {% endif %}
+        insertGroupList(groupStore);
+    }
+</script>

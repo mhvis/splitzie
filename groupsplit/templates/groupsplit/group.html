@@ -1,0 +1,59 @@
+{% extends "groupsplit/base.html" %}
+{% load currency %}
+
+{% block content %}
+    {% include 'groupsplit/snippets/group_store.html' %}
+
+    <h1>{{ group.name }}</h1>
+    {% if not group.emails.exists %}
+        <p>
+            There are no e-mail addresses linked to this group.
+            We recommend <a href="{% url 'group-edit' code=group.code %}" hx-boost="true">linking</a> at least one,
+            so it can be used to recover access to the group.
+        </p>
+    {% endif %}
+    {% if group.participants.count < 2 %}
+        <a href="#">Add expense</a>
+        <p>To enter your first expense, <a href="{% url 'group-edit' code=group.code %}" hx-boost="true">add</a> at
+            least two participants to this group.
+        </p>
+    {% else %}
+        <a href="{% url 'expense-create' code=group.code %}" hx-boost="true">Add expense</a>
+    {% endif %}
+    <a href="{% url 'group-settle' code=group.code %}" hx-boost="true">Balance and settle</a>
+    <a href="{% url 'group-edit' code=group.code %}" hx-boost="true">Edit group</a>
+
+    <h2>Payments</h2>
+    <ul>
+        {% for p in group.payments.all %}
+            {% if p.type == "expense" %}
+                {% with e=p.expense %}
+                    <li>
+                        <div>
+                            <a href="{{ e.get_absolute_url }}" hx-boost="true">
+                                {{ e.created_at|date:"SHORT_DATE_FORMAT" }}:
+                                {{ e.abs_amount|euro }} {% if e.is_expense %}paid{% else %}received{% endif %}
+                                by {{ e.payer }}
+                            </a>
+                        </div>
+                        <div>{{ e.description }}</div>
+                    </li>
+                {% endwith %}
+            {% elif p.type == "settle" %}
+                {% with t=p.get_transfer %}
+                    <li>
+                        {{ p.created_at|date:"SHORT_DATE_FORMAT" }}:
+                        {{ t.0.name }} repaid {{ t.2|euro }} to {{ t.1.name }}
+                    </li>
+                {% endwith %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <h2>Share</h2>
+    <p>
+        To give someone else access to this group, send them the page URL or let them scan the following QR code:
+        {% include 'groupsplit/snippets/group_qr.html' %}
+    </p>
+
+{% endblock %}

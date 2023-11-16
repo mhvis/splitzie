@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li><a href="{% url "group-list" %}">Lists</a></li>
+        <li class="active">{{ object.name }}</li>
+    </ol>
+    <h1>Join</h1>
+    <form method="post" action="{% url "group-join" pk=object.pk code=object.join_code %}">
+        {% csrf_token %}
+        <p>Do you want to join the <strong>{{ object.name }}</strong> list?</p>
+        <button type="submit" class="btn btn-default">Join list</button>
+    </form>
+{% endblock %}

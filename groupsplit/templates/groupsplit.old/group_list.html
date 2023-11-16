@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="active">Lists</li>
+    </ol>
+    <a href="{% url 'group-create' %}">New list</a>
+    <ul>
+        {% for group in object_list %}
+            <li><a href="{{ group.get_absolute_url }}">{{ group.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

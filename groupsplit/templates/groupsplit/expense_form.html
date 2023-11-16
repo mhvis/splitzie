@@ -1,0 +1,166 @@
+{% extends 'groupsplit/base.html' %}
+
+{% block content %}
+    <form method="post" action="{% url 'expense-create' code=group.code %}" hx-boost="true"
+          hx-encoding="multipart/form-data"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>
+            <span class="show-expense">Expense details</span>
+            <span class="show-income" hidden>Income details</span>
+        </h2>
+        <div>
+            <button type="button" class="show-expense" onclick='
+                    document.querySelectorAll(".show-expense").forEach((e) => {e.hidden = true});
+                    document.querySelectorAll(".show-income").forEach((e) => {e.hidden = false});
+                    document.querySelector("input[name=type]").value = "income";'>
+                Change to income
+            </button>
+            <button type="button" class="show-income" hidden onclick='
+                    document.querySelectorAll(".show-income").forEach((e) => {e.hidden = true});
+                    document.querySelectorAll(".show-expense").forEach((e) => {e.hidden = false});
+                    document.querySelector("input[name=type]").value = "expense";'>
+                Change to expense
+            </button>
+            <input type="hidden" name="type" value="expense">
+        </div>
+        <div>
+            <label>
+                Amount:
+                <input type="number" name="amount" step="0.01" max="99999.99" min="0.01" id="amountField"
+                       placeholder="0.00" autofocus
+                       oninput="recompute();" required onchange="this.value = this.valueAsNumber.toFixed(2);">
+            </label>
+        </div>
+        <div>
+            <label>
+                <span class="show-expense">Payer</span>
+                <span class="show-income" hidden>Recipient</span>
+                :
+                <select name="payer" id="payerSelect">
+                    {% for participant in group.participants.all %}
+                        <option value="{{ participant.pk }}">{{ participant.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <div>
+            <label>
+                Description:
+                <input type="text" name="description" maxlength="150" required>
+            </label>
+        </div>
+        <div>
+            <label>
+                Receipt photo or screenshot (optional):
+                <input type="file" name="image" accept="image/*">
+            </label>
+        </div>
+
+        <h2>Division</h2>
+        <button type="button"
+                onclick="{% for p in group.participants.all %}setDivision(document.getElementById('participantInput{{ p.pk }}'), 1, false);{% endfor %} recompute();">
+            Everyone 1x
+        </button>
+        {% for participant in group.participants.all %}
+            <div>
+                <label>
+                    {{ participant.name }}:
+                    <input type="number" name="participant-{{ participant.pk }}" step="0.01" max="99999.99"
+                           min="-99999.99" oninput="setDivision(this, 0, false); recompute();"
+                           value="0.00" data-division="0" id="participantInput{{ participant.pk }}">
+                </label>
+                <button type="button"
+                        onclick="setDivision(this.parentElement.querySelector('input'), -1, true); recompute();">
+                    -
+                </button>
+                <span>–</span>
+                <button type="button"
+                        onclick="setDivision(this.parentElement.querySelector('input'), 1, true); recompute();">
+                    +
+                </button>
+            </div>
+        {% endfor %}
+        <script>
+            function setDivision(field, value, relative) {
+                if (relative) {
+                    const current = parseInt(field.dataset.division);
+                    value = Math.max(0, current + value);
+                }
+                field.dataset.division = value.toString();
+                field.parentElement.parentElement.querySelector("span").textContent = value || "–";
+            }
+
+            // Shuffle function from: https://stackoverflow.com/a/2450976
+            function shuffle(array) {
+                let currentIndex = array.length, randomIndex;
+
+                // While there remain elements to shuffle.
+                while (currentIndex > 0) {
+
+                    // Pick a remaining element.
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex--;
+
+                    // And swap it with the current element.
+                    [array[currentIndex], array[randomIndex]] = [
+                        array[randomIndex], array[currentIndex]];
+                }
+
+                return array;
+            }
+
+            function recompute() {
+                // Recomputes the division amounts
+
+                // Retrieve DOM elements
+                const amountField = document.getElementById("amountField");
+                const fields = [
+                    {% for participant in group.participants.all %}
+                        document.getElementById("participantInput{{ participant.pk }}"),
+                    {% endfor %}
+                ];
+                // Collect current values
+                const amount = Math.round((amountField.valueAsNumber || 0) * 100);
+                const participants = fields.map((el) => ({
+                    "el": el,
+                    "division": parseInt(el.dataset.division),
+                    "cents": Math.round((el.valueAsNumber || 0) * 100),
+                }));
+
+                const included = participants.filter((o) => o.division !== 0);
+                const excluded = participants.filter((o) => o.division === 0);
+
+                if (included.length === 0) {
+                    // No participants to compute for
+                    return;
+                }
+
+                // Compute the amount to divide
+                const total = amount - excluded.reduce((t, o) => t + o.cents, 0);
+
+                // Compute the quotient and remainder (integer division)
+                const divisor = included.reduce((t, o) => t + o.division, 0);
+                const quotient = Math.floor(total / divisor);
+                let remainder = total % divisor;
+
+                // Divide over the participants, and randomly add the remainder
+                shuffle(included);
+                included.forEach((o) => {
+                    const extra = Math.min(remainder, o.division);
+                    const value = quotient * o.division + extra;
+                    remainder -= extra;
+
+                    o.el.value = (value / 100).toFixed(2);
+                });
+            }
+        </script>
+
+        <div>
+            <button type="submit">
+                Add <span class="show-expense">expense</span><span class="show-income" hidden>income</span>
+            </button>
+        </div>
+    </form>
+
+{% endblock %}

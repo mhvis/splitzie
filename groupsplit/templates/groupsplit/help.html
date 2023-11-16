@@ -1,0 +1,40 @@
+{% extends 'groupsplit/base.html' %}
+
+
+{% block content %}
+    <h2>Usage tips</h2>
+    <h4>Custom repayment</h4>
+    <p>
+        The repayment form lets you enter arbitrary repayments.
+        Say you owe 2 euros to Bob and 3 euros to Alice.
+        Instead of repaying both of them, you could also give 5 euros to Bob and ask him to pay the remainder forward.
+        On this website you can enter this as a repayment of 5 euros to Bob.
+        The balances will then change to reflect that Bob now owes 3 euros to Alice.
+    </p>
+{#    <h4>Settling algorithm</h4>#}
+{#    <p>#}
+{#        The algorithm tries to find the minimal number of moves to repay everyone in the group.#}
+{#    </p>#}
+
+    <h2>Security</h2>
+    <p>
+        Anyone who has the link of a group, can edit it.
+        So, if a link is compromised, a malicious user could enter new payments.
+        However, it is not possible to delete entered payments,
+        therefore you can be sure that no past activity will ever be removed and go unnoticed.
+    </p>
+    <p>
+        If your group link is compromised, you can create a new group and enter the starting balances.
+    </p>
+    <h2>Other questions?</h2>
+    <p>
+        Feel free to send an e-mail to help@splitzie.nl.
+    </p>
+    <h2>Privacy</h2>
+    <p>
+        We do not use tracking and session cookies.
+        We also don't have an account system and don't log IP addresses.
+        Therefore, we can't track you in any way.
+    </p>
+{% endblock %}
+

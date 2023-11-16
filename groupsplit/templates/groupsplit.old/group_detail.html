@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load currency %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li><a href="{% url "group-list" %}">Lists</a></li>
+        <li class="active">{{ object.name }}</li>
+    </ol>
+
+    <a href="{% url "transaction-create" pk=object.pk %}" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Transaction
+    </a>
+    <a href="{% url 'transaction-list' pk=object.pk %}" class="btn btn-default">
+        View transactions
+    </a>
+    <h3>Members</h3>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Person</th>
+            <th scope="col">Balance</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user, balance in object.users_with_balance %}
+            <tr>
+                <td>{{ user.get_full_name }}</td>
+                <td>{{ balance|euro }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-sm-4">
+            <label for="invite-link">Invite link</label>
+            <input type="text" id="invite-link" class="form-control" readonly value="{{ join_url }}">
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'groupsplit/base.html' %}
+{% load currency %}
+
+{% block content %}
+    <a href="{% url 'group' code=expense.group.code %}" hx-boost="true">← Back to group</a>
+
+    <h3>{{ expense.description }}</h3>
+    <p>
+        {{ expense.abs_amount|euro }} {% if expense.is_expense %}paid{% else %}received{% endif %}
+        by
+        {{ expense.payer.name }}
+    </p>
+
+    <ul>
+        {% for e in expense.entries.all %}
+            <li>{{ e.participant.name }}: [balance change {% if e.amount > 0 %}+{% endif %}{{ e.amount|euro }}]</li>
+        {% endfor %}
+    </ul>
+
+    {% if expense.image %}
+        <img src="{{ expense.image.url }}" alt="Receipt">
+    {% endif %}
+
+{% endblock %}

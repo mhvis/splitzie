@@ -1,0 +1,4 @@
+/* Needs to be built to a style.css using Tailwind. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

@@ -1,0 +1,12 @@
+{% load static %}
+<div id="groupQR"></div>
+<script>
+    htmx.onLoad(function() {
+        const qrEl = document.getElementById("groupQR");
+        qrEl.innerHTML = '';
+        new QRCode(
+            qrEl,
+            "http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}{% url 'group' code=group.code %}"
+        );
+    });
+</script>

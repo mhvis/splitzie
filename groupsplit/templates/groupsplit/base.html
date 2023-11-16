@@ -1,0 +1,19 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Splitzie</title>
+    <script src="{% static 'vendor/htmx.min.js' %}"></script>
+    <script src="{% static 'vendor/qrcode.min.js' %}"></script>
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<div class="container">
+    <h1>
+        <a href="{% url 'index' %}" hx-boost="true">Splitzie [Alpha]</a>
+        <small>– <a href="{% url 'help' %}" hx-boost="true">Help</a></small>
+    </h1>
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>
