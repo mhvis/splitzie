@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./groupsplit/templates/**/*.html"],
+  content: ["./splitzie/templates/**/*.html"],
   theme: {
     extend: {},
   },

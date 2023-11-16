@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from groupsplit import models
+from splitzie import models
 
 
 class ParticipantInline(admin.TabularInline):

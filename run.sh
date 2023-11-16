@@ -32,4 +32,4 @@ echo "Start server"
   --daemon \
   --log-file log \
   --pid pid \
-  groupsplit.wsgi
+  splitzie.wsgi

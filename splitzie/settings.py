@@ -23,7 +23,7 @@ if not DEBUG:
 
 
 INSTALLED_APPS = [
-    "groupsplit.apps.GroupSplitConfig",
+    "splitzie.apps.SplitzieConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -42,7 +42,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "groupsplit.urls"
+ROOT_URLCONF = "splitzie.urls"
 
 TEMPLATES = [
     {
@@ -60,7 +60,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "groupsplit.wsgi.application"
+WSGI_APPLICATION = "splitzie.wsgi.application"
 
 
 # SQLite is not supported because it does not have a decimal type

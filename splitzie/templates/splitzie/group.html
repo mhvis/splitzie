@@ -1,8 +1,8 @@
-{% extends "groupsplit/base.html" %}
+{% extends "splitzie/base.html" %}
 {% load currency %}
 
 {% block content %}
-    {% include 'groupsplit/snippets/group_store.html' %}
+    {% include 'splitzie/snippets/group_store.html' %}
 
     <h1>{{ group.name }}</h1>
     {% if not group.emails.exists %}
@@ -53,7 +53,7 @@
     <h2>Share</h2>
     <p>
         To give someone else access to this group, send them the page URL or let them scan the following QR code:
-        {% include 'groupsplit/snippets/group_qr.html' %}
+        {% include 'splitzie/snippets/group_qr.html' %}
     </p>
 
 {% endblock %}

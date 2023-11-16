@@ -45,7 +45,7 @@ class Group(models.Model):
         return self.name
 
 
-class GroupEmail(models.Model):
+class LinkedEmail(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="emails")
     email = models.EmailField()
 

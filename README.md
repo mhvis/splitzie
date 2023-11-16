@@ -1,13 +1,9 @@
-
-#
-
-Working title: Splitzie
-
+# Splitzie
 
 ## Development
 
 * Formatting: `$ black .`
-* Build CSS (requires Tailwind CLI): `tailwindcss -i ./tailwind.css -o ./groupsplit/static/style.css --minify`
+* Build CSS (requires Tailwind CLI): `tailwindcss -i ./tailwind.css -o ./splitzie/static/style.css --minify`
   * Add `--watch` to rebuild as needed.
 
 
@@ -40,10 +36,8 @@ for instance `pip install psycopg[binary]`.
 
 * E-mails
 * Progressive Enhancement: gracefully degrade when JavaScript is disabled.
-* Rename project files to a better name (Splitzie?).
 * Dark mode
 * Maybe store currency as integers (cents) in the database instead of decimals.
   This enables support for SQLite.
 * Replace messy VanillaJS with Alpine.js.
 * Export payments
-
