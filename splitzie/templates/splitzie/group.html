@@ -2,9 +2,7 @@
 {% load currency %}
 
 {% block content %}
-    {% include 'splitzie/snippets/group_store.html' %}
-
-    <h1>{{ group.name }}</h1>
+    <h1 x-init="$store.groups.add('{{ group.code }}', '{{ group.name|escapejs }}')">{{ group.name }}</h1>
     {% if not group.emails.exists %}
         <p>
             There are no e-mail addresses linked to this group.

@@ -1,13 +1,30 @@
 {% extends "splitzie/base.html" %}
 
 {% block content %}
-    {% include 'splitzie/snippets/group_store.html' %}
     <p>
         Easily divide group expenses over all participants.
         No account required.
         Works for any type of expenses, income and settlements between group participants.
     </p>
-    <button hx-post="{% url 'group-create' %}" hx-target="body">
+
+    <template x-data x-if="Object.keys($store.groups.groups).length > 0">
+        <div>
+            <h2>Your groups</h2>
+            <ul>
+                <template x-for="[code, group] in Object.entries($store.groups.groups)">
+                    <li>
+                        <a :href="'{% url 'group' code="CODE" %}'.replace('CODE', code)" x-text="group.name"></a>
+                        <button @click="if (confirm('Are you sure you want to remove this group entry? To add it back later, revisit the group URL.')) { $store.groups.remove(code) }">
+                            Leave
+                        </button>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </template>
+
+    <button hx-post="{% url 'group-create' %}" hx-target="body" x-data
+            x-text="Object.keys($store.groups.groups).length > 0 ? 'Create new group' : 'Get started'">
         Get started
     </button>
 
@@ -18,6 +35,6 @@
             We do not push a payment system for settling.
             Just pay the others using your own familiar banking app, or with cash.
         </li>
-{#        <li>This website does not require JavaScript to function (but it does make it better).</li>#}
+        {#        <li>This website does not require JavaScript to function (but it does make it better).</li>#}
     </ul>
 {% endblock %}

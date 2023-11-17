@@ -41,3 +41,9 @@ for instance `pip install psycopg[binary]`.
   This enables support for SQLite.
 * Replace messy VanillaJS with Alpine.js.
 * Export payments
+
+
+## Todo
+
+* Put QR code code in backend and move to group info page.
+* Rename 'edit group' to 'group info'
