@@ -3,13 +3,6 @@
 
 {% block content %}
     <h1 x-init="$store.groups.add('{{ group.code }}', '{{ group.name|escapejs }}')">{{ group.name }}</h1>
-    {% if not group.emails.exists %}
-        <p>
-            There are no e-mail addresses linked to this group.
-            We recommend <a href="{% url 'group-edit' code=group.code %}" hx-boost="true">linking</a> at least one,
-            so it can be used to recover access to the group.
-        </p>
-    {% endif %}
     {% if group.participants.count < 2 %}
         <a href="#">Add expense</a>
         <p>To enter your first expense, <a href="{% url 'group-edit' code=group.code %}" hx-boost="true">add</a> at
@@ -19,7 +12,15 @@
         <a href="{% url 'expense-create' code=group.code %}" hx-boost="true">Add expense</a>
     {% endif %}
     <a href="{% url 'group-settle' code=group.code %}" hx-boost="true">Balance and settle</a>
-    <a href="{% url 'group-edit' code=group.code %}" hx-boost="true">Edit group</a>
+    <a href="{% url 'group-edit' code=group.code %}" hx-boost="true">Group info</a>
+
+    {% if not group.emails.exists %}
+        <p>
+            There are no e-mail addresses linked to this group.
+            We recommend <a href="{% url 'group-edit' code=group.code %}" hx-boost="true">linking</a> at least one,
+            so it can be used to recover access to the group.
+        </p>
+    {% endif %}
 
     <h2>Payments</h2>
     <ul>
@@ -47,11 +48,4 @@
             {% endif %}
         {% endfor %}
     </ul>
-
-    <h2>Share</h2>
-    <p>
-        To give someone else access to this group, send them the page URL or let them scan the following QR code:
-        {% include 'splitzie/snippets/group_qr.html' %}
-    </p>
-
 {% endblock %}

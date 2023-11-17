@@ -4,10 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Splitzie</title>
-    <script defer src="{% static 'splitzie.js' %}"></script>  <!-- Needs to be before Alpine -->
-    <script defer src="{% static 'vendor/htmx.min.js' %}"></script>
-    <script defer src="{% static 'vendor/qrcode.min.js' %}"></script>
+    <!-- HTMX needs to load before htmx script in the body, so should not have defer (or we should change the body script). -->
+    <script src="{% static 'vendor/htmx.min.js' %}"></script>
+    <!-- Our custom JS needs to be before Alpine. -->
+    <script defer src="{% static 'splitzie.js' %}"></script>
     <script defer src="{% static 'vendor/alpine.min.js' %}"></script>
+    <link href="{% static 'splitzie.css' %}" rel="stylesheet">
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 <div class="container">

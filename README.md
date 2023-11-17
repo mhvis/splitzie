@@ -32,7 +32,7 @@ for instance `pip install psycopg[binary]`.
 * JavaScript: Google Style Guide (https://google.github.io/styleguide/jsguide.html)
 
 
-## Future work (in loose of priority)
+## Future work (in loose order of priority)
 
 * E-mails
 * Progressive Enhancement: gracefully degrade when JavaScript is disabled.
@@ -45,5 +45,7 @@ for instance `pip install psycopg[binary]`.
 
 ## Todo
 
-* Put QR code code in backend and move to group info page.
-* Rename 'edit group' to 'group info'
+* Help page: something about rounding up and down and how it is chosen randomly. Also remark that it's possible to view the exact script by opening the page source code (for nerds).
+* Help: add About section. Created by Maarten. The source code may be made available as open source if there's interest for that. Drop me an email.
+* Privacy: it is possible for us to see your group info and payments.
+* Feature requests

@@ -2,7 +2,8 @@
 {% load currency %}
 
 {% block content %}
-    <a href="{% url 'group' code=group.code %}" hx-boost="true">Done</a>
+    <h1>{{ group.name }}</h1>
+    <a href="{% url 'group' code=group.code %}" hx-boost="true">← Back to group</a>
     <h2>Balance</h2>
     <ul>
         {% for p in group.participants.all %}

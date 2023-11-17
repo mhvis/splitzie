@@ -1,6 +1,8 @@
 {% extends 'splitzie/base.html' %}
 
 {% block content %}
+    <h1>{{ group.name }}</h1>
+    <a href="{% url 'group' code=group.code %}" hx-boost="true">← Back to group</a>
     <form method="post" action="{% url 'expense-create' code=group.code %}" hx-boost="true"
           hx-encoding="multipart/form-data"
           enctype="multipart/form-data">

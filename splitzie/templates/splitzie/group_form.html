@@ -1,11 +1,12 @@
 {% extends "splitzie/base.html" %}
 
 {% block content %}
-    <h1>Edit group</h1>
+    <h1>{{ group.name }}</h1>
+    <a href="{% url 'group' code=group.code %}" hx-boost="true">← Back to group</a>
     <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true" hx-target="#nameResponse">
         {% csrf_token %}
         <label>
-            Name:
+            Set name:
             <input type="text" maxlength="150" name="name" value="{{ group.name }}">
         </label>
         <button type="submit" name="form" value="name">Save</button>
@@ -36,6 +37,45 @@
         <button type="submit" name="form" value="participant-create">Add</button>
     </form>
 
+    <h4>Share</h4>
+
+    <p>
+        To share this group with someone, send them the group URL or let them scan the QR code.
+    </p>
+
+    <label>
+        Group URL:
+        {# @formatter:off #}
+        <input type="text" disabled
+               value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}{% url 'group' code=group.code %}">
+        {# @formatter:on #}
+        <button type="button" onclick="navigator.clipboard.writeText('http{% if request.is_secure %}s{% endif %}://'+
+                '{{ request.get_host }}{% url 'group' code=group.code %}').then(() => {
+                this.textContent = 'Copied';
+                setTimeout(() => {this.textContent = 'Copy'}, 5000);
+                },
+                () => {
+                this.textContent = 'Could not copy'
+                setTimeout(() => {this.textContent = 'Copy'}, 5000);
+                });">
+            Copy
+        </button>
+    </label>
+    <div x-data="{ open: false }">
+        <div>
+            <button type="button" @click="open = ! open" x-text="open ? 'Hide QR code' : 'Show QR code'">
+                Show QR code
+            </button>
+        </div>
+        <div x-show="open" x-cloak>
+            <img src="{{ qr_png_uri }}" alt="Image showing a QR code for the group URL"
+                 style="border: 2px solid #aaaaaa;">
+        </div>
+    </div>
+
+
+
+
     <h4>E-mails</h4>
     <p>
         Linked e-mails receive a notification when a payment was added.
@@ -51,13 +91,11 @@
             </form>
         {% endfor %}
     </ul>
-        <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true">
+    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true">
         <label>
             Add e-mail address:
             <input type="email" maxlength="150" name="email" placeholder="mail@example.com" required>
         </label>
         <button type="submit" name="form" value="email-create">Add</button>
     </form>
-
-    <a href="{% url 'group' code=group.code %}" hx-boost="true">Done</a>
 {% endblock %}

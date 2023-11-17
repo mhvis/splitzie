@@ -10,7 +10,13 @@ django==4.2.7
     # via -r requirements/common.in
 pillow==10.1.0
     # via -r requirements/common.in
+pypng==0.20220715.0
+    # via qrcode
+qrcode==7.4.2
+    # via -r requirements/common.in
 sqlparse==0.4.4
     # via django
 typing-extensions==4.8.0
-    # via asgiref
+    # via
+    #   asgiref
+    #   qrcode

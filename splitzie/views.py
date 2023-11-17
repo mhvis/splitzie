@@ -1,18 +1,18 @@
-import decimal
+import base64
+import io
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+import qrcode
+import qrcode.image.svg
 from django.core.exceptions import BadRequest
-from django.db import transaction
 from django.forms import modelform_factory
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.views import View
 from django.views.generic import (
     TemplateView,
-    ListView,
     DetailView,
-    FormView,
 )
 from django.views.generic.detail import SingleObjectMixin
 
@@ -47,6 +47,46 @@ class GroupCreateView(View):
 
 class GroupEditView(GroupMixin, DetailView):
     template_name = "splitzie/group_form.html"
+
+    def get_qr_svg(self) -> str:
+        # Deprecated: use PNG
+        if not self.object:
+            raise ValueError("Group missing")
+        url = self.request.build_absolute_uri(reverse("group", kwargs={"code": self.object.code}))
+
+        qr = qrcode.QRCode(
+            version=None,
+            image_factory=qrcode.image.svg.SvgPathImage,
+            box_size=10,
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
+        return qr.make_image().to_string(encoding="unicode")
+
+    def get_qr_png_uri(self) -> str:
+        if not self.object:
+            raise ValueError("Group missing")
+        url = self.request.build_absolute_uri(reverse("group", kwargs={"code": self.object.code}))
+
+        qr = qrcode.QRCode(
+            box_size=5,
+            border=5,
+        )
+        qr.add_data(url)
+        qr.make()
+        img = qr.make_image()
+        buffered = io.BytesIO()
+        img.save(buffered)
+        data = base64.b64encode(buffered.getvalue()).decode("utf-8")
+        return f"data:image/png;base64,{data}"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            # "qr_svg": mark_safe(self.get_qr_svg()),
+            "qr_png_uri": mark_safe(self.get_qr_png_uri()),
+        })
+        return context
 
     def post(self, request, *args, **kwargs):
         group = self.object = self.get_object()
