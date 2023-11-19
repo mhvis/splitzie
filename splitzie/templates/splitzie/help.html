@@ -3,6 +3,15 @@
 
 {% block content %}
     <h2>Usage tips</h2>
+
+    <h4>Starting balance</h4>
+    <p>
+        To enter a starting balance, you can create a payment with an amount of
+        0 euros.
+        Set the payment as income and enter the starting balances of the
+        participants in the division section. Enter negative balances using a
+        negative amount.
+    </p>
     <h4>Custom repayment</h4>
     <p>
         The repayment form lets you enter arbitrary repayments.
@@ -16,25 +25,53 @@
 {#        The algorithm tries to find the minimal number of moves to repay everyone in the group.#}
 {#    </p>#}
 
+    <h4>About rounding</h4>
+    <p>
+        When a payment is divided, the division amounts may need to be rounded.
+        This means that some participants may get assigned an amount that is one cent
+        higher than other participants, to make sure that the sum of all divisions
+        is exactly equal to the total expense amount.
+        The participants who pay this extra cent are chosen randomly.
+        The difference is always at most one cent.
+    </p>
+    <p>
+        For nerds: it is possible to view the exact division script that is used,
+        by opening the page source code.
+    </p>
+    <h4>Do you have another question?</h4>
+    <p>
+        Feel free to contact me at mail@maartenvisscher.nl for any questions
+        Also if would like to have a new feature added, let me know.
+    </p>
     <h2>Security</h2>
     <p>
         Anyone who has the link of a group, can edit it.
         So, if a link is compromised, a malicious user could enter new payments.
         However, it is not possible to delete entered payments,
-        therefore you can be sure that no past activity will ever be removed and go unnoticed.
-    </p>
-    <p>
-        If your group link is compromised, you can create a new group and enter the starting balances.
-    </p>
-    <h2>Other questions?</h2>
-    <p>
-        Feel free to send an e-mail to help@splitzie.nl.
+        therefore no real harm can be done.
+        If your link is compromised, you can create a new group and set the starting balances
+        as required.
     </p>
     <h2>Privacy</h2>
     <p>
-        We do not use tracking and session cookies.
-        We also don't have an account system and don't log IP addresses.
-        Therefore, we can't track you in any way.
+        We do not use tracking and session cookies,
+        nor do we have an account system or log IP address.
+        We can see the payments that you entered and the e-mail addresses that you linked
+        (this is unavoidable).
+        We take great care to ensure that they are well protected.
+    </p>
+    <h2>About</h2>
+    <p>
+        This app is a hobby project, created because I was annoyed that the
+        widely used apps WieBetaaltWat and Groepie (Tikkie) do not allow you to do
+        partial settlements and that they push their payment system very prominently.
+    </p>
+    <p>
+        This app will remain online and free as long as it is actively used. The source code may be available
+        upon request and might be made open source in the future.
+    </p>
+    <p>
+        To contact me, send an e-mail to
+        <a href="mailto:mail@maartenvisscher.nl" target="_blank">mail@maartenvisscher.nl</a>.
     </p>
 {% endblock %}
-

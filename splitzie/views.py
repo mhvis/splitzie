@@ -52,7 +52,9 @@ class GroupEditView(GroupMixin, DetailView):
         # Deprecated: use PNG
         if not self.object:
             raise ValueError("Group missing")
-        url = self.request.build_absolute_uri(reverse("group", kwargs={"code": self.object.code}))
+        url = self.request.build_absolute_uri(
+            reverse("group", kwargs={"code": self.object.code})
+        )
 
         qr = qrcode.QRCode(
             version=None,
@@ -66,7 +68,9 @@ class GroupEditView(GroupMixin, DetailView):
     def get_qr_png_uri(self) -> str:
         if not self.object:
             raise ValueError("Group missing")
-        url = self.request.build_absolute_uri(reverse("group", kwargs={"code": self.object.code}))
+        url = self.request.build_absolute_uri(
+            reverse("group", kwargs={"code": self.object.code})
+        )
 
         qr = qrcode.QRCode(
             box_size=5,
@@ -82,10 +86,12 @@ class GroupEditView(GroupMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            # "qr_svg": mark_safe(self.get_qr_svg()),
-            "qr_png_uri": mark_safe(self.get_qr_png_uri()),
-        })
+        context.update(
+            {
+                # "qr_svg": mark_safe(self.get_qr_svg()),
+                "qr_png_uri": mark_safe(self.get_qr_png_uri()),
+            }
+        )
         return context
 
     def post(self, request, *args, **kwargs):

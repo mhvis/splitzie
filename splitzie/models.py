@@ -125,6 +125,9 @@ def expense_image_path(instance, filename):
 
 class Expense(Payment):
     # Negative for expenses. Positive for income.
+    #
+    # An amount of 0 is allowed. This allows for setting a starting balance.
+    # We'll show it as income of 0 euros.
     amount = models.DecimalField(max_digits=7, decimal_places=2)
     payer = models.ForeignKey(
         Participant,

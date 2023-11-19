@@ -16,7 +16,11 @@ urlpatterns = [
                 path("edit/", views.GroupEditView.as_view(), name="group-edit"),
                 path("add/", views.ExpenseCreateView.as_view(), name="expense-create"),
                 path("settle/", views.GroupSettleView.as_view(), name="group-settle"),
-                path("expense/<int:pk>/", views.ExpenseDetailView.as_view(), name="expense"),
+                path(
+                    "expense/<int:pk>/",
+                    views.ExpenseDetailView.as_view(),
+                    name="expense",
+                ),
             ]
         ),
     ),

@@ -41,11 +41,3 @@ for instance `pip install psycopg[binary]`.
   This enables support for SQLite.
 * Replace messy VanillaJS with Alpine.js.
 * Export payments
-
-
-## Todo
-
-* Help page: something about rounding up and down and how it is chosen randomly. Also remark that it's possible to view the exact script by opening the page source code (for nerds).
-* Help: add About section. Created by Maarten. The source code may be made available as open source if there's interest for that. Drop me an email.
-* Privacy: it is possible for us to see your group info and payments.
-* Feature requests

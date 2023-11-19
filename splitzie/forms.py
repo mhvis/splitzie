@@ -8,7 +8,7 @@ from splitzie.models import Expense, Participant, Entry, Payment
 class ExpenseForm(forms.ModelForm):
     type = forms.ChoiceField(choices=[("expense", "Expense"), ("income", "Income")])
     amount = forms.DecimalField(
-        max_digits=7, decimal_places=2, min_value=Decimal("0.01")
+        max_digits=7, decimal_places=2, min_value=Decimal("0.00")
     )
 
     class Meta:
