@@ -1,1 +1,2 @@
+/* Used by Alpine.js to prevent page load flicker. */
 [x-cloak] { display: none !important; }

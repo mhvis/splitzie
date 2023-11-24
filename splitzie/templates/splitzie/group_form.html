@@ -1,101 +1,115 @@
 {% extends "splitzie/base.html" %}
 
 {% block content %}
-    <h1>{{ group.name }}</h1>
-    <a href="{% url 'group' code=group.code %}" hx-boost="true">← Back to group</a>
-    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true" hx-target="#nameResponse">
+    {% include 'splitzie/snippets/group_back.html' %}
+
+    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true">
         {% csrf_token %}
-        <label>
-            Set name:
-            <input type="text" maxlength="150" name="name" value="{{ group.name }}">
-        </label>
-        <button type="submit" name="form" value="name">Save</button>
-        <div id="nameResponse"></div>
+        <div class="form-group">
+            <label for="nameInput">Group name</label>
+            <input type="text" maxlength="150" name="name" value="{{ group.name }}" autocomplete="off"
+                   class="form-control" id="nameInput">
+        </div>
+        <button type="submit" name="form" value="name" class="btn btn-primary">Save</button>
+        {% if request.POST.form == 'name' %}<em>Saved</em>{% endif %}
     </form>
-    <h4>Participants</h4>
-    <ul>
+    <h2>Participants</h2>
+    <ul class="list-group">
         {% for participant in group.participants.all %}
-            <li>
+            <li class="list-group-item">
                 {{ participant.name }}
                 {% if not participant.entries.exists and not participant.expenses.exists %}
-                    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true">
+                    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true"
+                          hx-swap="show:none" style="display: inline-block;" class="pull-right">
                         {% csrf_token %}
                         <input type="hidden" name="participant" value="{{ participant.pk }}">
-                        <button type="submit" name="form" value="participant-delete">Remove</button>
+                        <button type="submit" name="form" value="participant-delete" class="btn btn-danger btn-xs">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            Remove
+                        </button>
                     </form>
                 {% endif %}
             </li>
 
         {% endfor %}
     </ul>
-    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true">
-        <label>
-            Add participant:
+    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true" hx-swap="show:none">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="newParticipantInput">Add participant</label>
             <input type="text" maxlength="150" name="name" required
-                   {% if request.POST.form == 'participant-create' %}autofocus{% endif %}>
-        </label>
-        <button type="submit" name="form" value="participant-create">Add</button>
+                   {% if request.POST.form == 'participant-create' %}autofocus{% endif %}
+                   id="newParticipantInput" class="form-control" autocomplete="off">
+        </div>
+        <button type="submit" name="form" value="participant-create" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add
+        </button>
     </form>
 
-    <h4>Share</h4>
-
+    <h2>Share</h2>
     <p>
         To share this group with someone, send them the group URL or let them scan the QR code.
     </p>
-
-    <label>
-        Group URL:
-        {# @formatter:off #}
-        <input type="text" disabled
-               value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}{% url 'group' code=group.code %}">
-        {# @formatter:on #}
-        <button type="button" onclick="navigator.clipboard.writeText('http{% if request.is_secure %}s{% endif %}://'+
-                '{{ request.get_host }}{% url 'group' code=group.code %}').then(() => {
-                this.textContent = 'Copied';
-                setTimeout(() => {this.textContent = 'Copy'}, 5000);
-                },
-                () => {
-                this.textContent = 'Could not copy'
-                setTimeout(() => {this.textContent = 'Copy'}, 5000);
-                });">
-            Copy
-        </button>
-    </label>
-    <div x-data="{ open: false }">
-        <div>
-            <button type="button" @click="open = ! open" x-text="open ? 'Hide QR code' : 'Show QR code'">
-                Show QR code
-            </button>
-        </div>
-        <div x-show="open" x-cloak>
-            <img src="{{ qr_png_uri }}" alt="Image showing a QR code for the group URL"
-                 style="border: 2px solid #aaaaaa;">
+    <div class="form-group">
+        <label for="groupUrlField">Group URL</label>
+        <div class="input-group">
+            {# @formatter:off #}
+            <input type="text" readonly class="form-control" id="groupUrlField"
+                   value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}{% url 'group' code=group.code %}">
+            {# @formatter:on #}
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default"
+                        onclick="navigator.clipboard.writeText('http{% if request.is_secure %}s{% endif %}://'+
+                                '{{ request.get_host }}{% url 'group' code=group.code %}').then(() => {
+                                this.textContent = 'Copied';
+                                setTimeout(() => {this.textContent = 'Copy'}, 5000);
+                                },
+                                () => {
+                                this.textContent = 'Could not copy'
+                                setTimeout(() => {this.textContent = 'Copy'}, 5000);
+                                });">
+                    Copy
+                </button>
+            </span>
         </div>
     </div>
+    <img src="{{ qr_png_uri }}" alt="Image showing a QR code for the group URL"
+         class="img-responsive img-thumbnail center-block">
 
 
-
-
-    <h4>E-mails</h4>
+    <h2 id="emails">E-mails</h2>
     <p>
         Linked e-mails receive a notification when a payment was added.
         They can also be used to recover access to the group page when the URL is lost.
     </p>
-    <ul>
+    <ul class="list-group">
         {% for email in group.emails.all %}
-            <li>{{ email.email }}</li>
-            <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true">
-                {% csrf_token %}
-                <input type="hidden" name="email" value="{{ email.pk }}">
-                <button type="submit" name="form" value="email-delete">Remove</button>
-            </form>
+            <li class="list-group-item">
+                {{ email.email }}
+                <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true" hx-swap="show:none"
+                      class="pull-right">
+                    {% csrf_token %}
+                    <input type="hidden" name="email" value="{{ email.pk }}">
+                    <button type="submit" name="form" value="email-delete" class="btn btn-danger btn-xs">
+                        <span class="glyphicon glyphicon-trash"></span>
+                        Remove
+                    </button>
+                </form>
+            </li>
         {% endfor %}
     </ul>
-    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true">
-        <label>
-            Add e-mail address:
-            <input type="email" maxlength="150" name="email" placeholder="mail@example.com" required>
-        </label>
-        <button type="submit" name="form" value="email-create">Add</button>
+    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true" hx-swap="show:none">
+        <div class="form-group">
+            <label for="emailField">
+                Add e-mail address
+            </label>
+            <input type="email" maxlength="150" name="email" placeholder="mail@example.com" required autocomplete="off"
+                   id="emailField" class="form-control">
+        </div>
+        <button type="submit" name="form" value="email-create" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add
+        </button>
     </form>
 {% endblock %}

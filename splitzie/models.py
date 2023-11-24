@@ -19,27 +19,8 @@ class Group(models.Model):
     code = models.CharField(max_length=150, default=token_urlsafe, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # def get_balance(self, user):
-    #     return Entry.objects.filter(participant=self, user=user).balance()
-    #
-    # def users_with_balance(self):
-    #     return ((u, self.get_balance(u)) for u in self.user_set.all())
-
-    # def get_settle(self):
-    #     ub = list(self.users_with_balance())
-    #     users = [e[0] for e in ub]
-    #     balances = [e[1] for e in ub]
-    #     entries = []
-    #     for i in range(len(users)):
-    #         while balances[i] < 0:
-    #             for j in range(len(users)):
-    #                 if balances[j] > 0:
-    #                     reduce = min(balances[j], -balances[i])
-    #                     balances[i] += reduce
-    #                     balances[j] -= reduce
-    #                     entries.append((users[i], users[j], reduce))
-    #                     break
-    #     return entries
+    def get_absolute_url(self):
+        return reverse("group", kwargs={"code": self.code})
 
     def __str__(self):
         return self.name
@@ -63,6 +44,9 @@ class Participant(models.Model):
         Group, on_delete=models.CASCADE, related_name="participants"
     )
     name = models.CharField(max_length=150)
+
+    class Meta:
+        ordering = ("name",)
 
     def __str__(self):
         return self.name
@@ -91,6 +75,10 @@ class Payment(models.Model):
         """Cleans the entries and atomically saves this payment with entries."""
         # Filter null entries
         entries = [e for e in entries if e.amount != 0]
+
+        # There should be at least 1 entry
+        if not entries:
+            raise ValueError("No entries given")
 
         # Sanity check: entries must sum to 0
         if sum(e.amount for e in entries) != 0:

@@ -2,9 +2,9 @@
 {% load currency %}
 
 {% block content %}
-    <h1>{{ group.name }}</h1>
-    <a href="{% url 'group' code=group.code %}" hx-boost="true">← Back to group</a>
-    <h2>Balance</h2>
+    {% include 'splitzie/snippets/group_back.html' %}
+
+    <h2>Balances</h2>
     <ul>
         {% for p in group.participants.all %}
             <li>{{ p.name }}: {{ p.balance|euro }}</li>

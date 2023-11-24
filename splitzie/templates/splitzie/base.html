@@ -3,20 +3,35 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Divide your group expenses in two clicks. No account required.">
     <title>Splitzie</title>
     <!-- HTMX needs to load before htmx script in the body, so should not have defer (or we should change the body script). -->
     <script src="{% static 'vendor/htmx.min.js' %}"></script>
     <!-- Our custom JS needs to be before Alpine. -->
     <script defer src="{% static 'splitzie.js' %}"></script>
     <script defer src="{% static 'vendor/alpine.min.js' %}"></script>
-    <link href="{% static 'splitzie.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-<div class="container">
-    <h1>
-        <a href="{% url 'index' %}" hx-boost="true">Splitzie [Alpha]</a>
-        <small>– <a href="{% url 'help' %}" hx-boost="true">Help</a></small>
-    </h1>
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="{% url 'index' %}" hx-boost="true" class="navbar-brand">
+                Splitzie <sup>Alpha</sup>
+            </a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li>
+                <a href="{% url 'help' %}" hx-boost="true">
+                    Help
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container" style="margin-bottom: 40px;">
     {% block content %}{% endblock %}
 </div>
 </body>

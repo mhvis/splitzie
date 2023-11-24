@@ -1,1 +1,10 @@
 *.js
+*.css
+*.map
+
+# Fonts
+*.eot
+*.svg
+*.ttf
+*.woff
+*.woff2

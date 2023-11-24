@@ -1,6 +1,9 @@
 {% extends "splitzie/base.html" %}
 
 {% block content %}
+    <div class="page-header">
+        <h1>Splitzie</h1>
+    </div>
     <p>
         Easily divide group expenses over all participants.
         No account required.
@@ -9,11 +12,12 @@
 
     <template x-data x-if="Object.keys($store.groups.groups).length > 0">
         <div>
-            <h2>Your groups</h2>
+            <h3>Recent groups</h3>
             <ul>
                 <template x-for="[code, group] in Object.entries($store.groups.groups)">
                     <li>
-                        <a :href="'{% url 'group' code="CODE" %}'.replace('CODE', code)" x-text="group.name"></a>
+                        <a :href="'{% url 'group' code="CODE" %}'.replace('CODE', code)" x-text="group.name"
+                           hx-boost="true"></a>
                         <button @click="if (confirm('Are you sure you want to remove this group entry? To add it back later, revisit the group URL.')) { $store.groups.remove(code) }">
                             Leave
                         </button>
@@ -24,11 +28,12 @@
     </template>
 
     <button hx-post="{% url 'group-create' %}" hx-target="body" x-data
-            x-text="Object.keys($store.groups.groups).length > 0 ? 'Create new group' : 'Get started'">
+            x-text="Object.keys($store.groups.groups).length > 0 ? 'Create new group' : 'Get started'"
+            class="btn btn-primary">
         Get started
     </button>
 
-    <h2>Why is this app better than WieBetaaltWat?</h2>
+    <h3>Why is this app better than WieBetaaltWat?</h3>
     <ul>
         <li>We support partial settlements between a subset of group participants.</li>
         <li>
@@ -36,5 +41,15 @@
             Just pay the others using your own familiar banking app, or with cash.
         </li>
         {#        <li>This website does not require JavaScript to function (but it does make it better).</li>#}
+    </ul>
+
+    <h3>Alpha</h3>
+    <p>
+        This website is in alpha phase. On the roadmap is:
+    </p>
+    <ul class="list-disc list-inside">
+        <li>Dutch translations</li>
+        <li>Dark mode</li>
+        <li>Export payments as CSV or Excel</li>
     </ul>
 {% endblock %}

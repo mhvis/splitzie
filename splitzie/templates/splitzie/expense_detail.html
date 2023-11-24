@@ -2,7 +2,7 @@
 {% load currency %}
 
 {% block content %}
-    <a href="{% url 'group' code=expense.group.code %}" hx-boost="true">← Back to group</a>
+    {% include 'splitzie/snippets/group_back.html' with group=expense.group %}
 
     <h3>{{ expense.description }}</h3>
     <p>

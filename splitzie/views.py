@@ -139,10 +139,7 @@ class GroupEditView(GroupMixin, DetailView):
         else:
             raise BadRequest
 
-        if action == "name":
-            return HttpResponse("Saved")
-        else:
-            return self.render_to_response(self.get_context_data())
+        return self.render_to_response(self.get_context_data())
 
 
 class GroupSettleView(GroupMixin, DetailView):

@@ -3,26 +3,45 @@
 
 {% block content %}
     <h1 x-init="$store.groups.add('{{ group.code }}', '{{ group.name|escapejs }}')">{{ group.name }}</h1>
-    {% if group.participants.count < 2 %}
-        <a href="#">Add expense</a>
-        <p>To enter your first expense, <a href="{% url 'group-edit' code=group.code %}" hx-boost="true">add</a> at
-            least two participants to this group.
-        </p>
-    {% else %}
-        <a href="{% url 'expense-create' code=group.code %}" hx-boost="true">Add expense</a>
-    {% endif %}
-    <a href="{% url 'group-settle' code=group.code %}" hx-boost="true">Balance and settle</a>
-    <a href="{% url 'group-edit' code=group.code %}" hx-boost="true">Group info</a>
+    <p class="lead text-muted">
+        {% if not group.participants.exists %}
+            No participants yet
+        {% else %}
+            {{ group.participants.all|join:", " }}
+        {% endif %}
+    </p>
+
+    <p>
+    <a href="{% url 'group-settle' code=group.code %}" hx-boost="true" class="btn btn-default">
+        <span class="glyphicon glyphicon-euro"></span>
+        Settle
+    </a>
+    <a href="{% url 'group-edit' code=group.code %}" hx-boost="true" class="btn btn-default">
+        <span class="glyphicon glyphicon-edit"></span>
+        Group info
+    </a>
+
+    </p>
 
     {% if not group.emails.exists %}
-        <p>
+        <div class="alert alert-warning">
             There are no e-mail addresses linked to this group.
-            We recommend <a href="{% url 'group-edit' code=group.code %}" hx-boost="true">linking</a> at least one,
+            We recommend <a href="{% url 'group-edit' code=group.code %}#emails" hx-boost="true">linking</a>
+            at least one,
             so it can be used to recover access to the group.
-        </p>
+        </div>
     {% endif %}
 
     <h2>Payments</h2>
+    <a href="{% url 'expense-create' code=group.code %}" hx-boost="true"
+       class="btn btn-primary {% if group.participants.count < 2 %}disabled{% endif %}">
+        <span class="glyphicon glyphicon-plus"></span>
+        New
+    </a>
+    {% if group.participants.count < 2 %}
+        <span>To add your first expense, add at least two participants to the group</span>
+    {% endif %}
+
     <ul>
         {% for p in group.payments.all %}
             {% if p.type == "expense" %}
@@ -48,4 +67,7 @@
             {% endif %}
         {% endfor %}
     </ul>
+    {% if not group.payments.exists %}
+        <p class="text-muted">No payments yet</p>
+    {% endif %}
 {% endblock %}
