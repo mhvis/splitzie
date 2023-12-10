@@ -47,36 +47,6 @@
         </button>
     </form>
 
-    <h2>Share</h2>
-    <p>
-        To share this group with someone, send them the group URL or let them scan the QR code.
-    </p>
-    <div class="form-group">
-        <label for="groupUrlField">Group URL</label>
-        <div class="input-group">
-            {# @formatter:off #}
-            <input type="text" readonly class="form-control" id="groupUrlField"
-                   value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}{% url 'group' code=group.code %}">
-            {# @formatter:on #}
-            <span class="input-group-btn">
-                <button type="button" class="btn btn-default"
-                        onclick="navigator.clipboard.writeText('http{% if request.is_secure %}s{% endif %}://'+
-                                '{{ request.get_host }}{% url 'group' code=group.code %}').then(() => {
-                                this.textContent = 'Copied';
-                                setTimeout(() => {this.textContent = 'Copy'}, 5000);
-                                },
-                                () => {
-                                this.textContent = 'Could not copy'
-                                setTimeout(() => {this.textContent = 'Copy'}, 5000);
-                                });">
-                    Copy
-                </button>
-            </span>
-        </div>
-    </div>
-    <img src="{{ qr_png_uri }}" alt="Image showing a QR code for the group URL"
-         class="img-responsive img-thumbnail center-block">
-
 
     <h2 id="emails">E-mails</h2>
     <p>
@@ -112,4 +82,40 @@
             Add
         </button>
     </form>
+
+
+    <h2>Share</h2>
+    <p>
+        To share this group with someone, send them the group URL or let them scan the QR code.
+    </p>
+    <div class="form-group">
+        <label for="groupUrlField">Group URL</label>
+        <div class="input-group">
+            {# @formatter:off #}
+            <input type="text"
+                   readonly
+                   class="form-control" id="groupUrlField"
+                   value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}{% url 'group' code=group.code %}">
+            {# @formatter:on #}
+            <span class="input-group-btn">
+                <button type="button"
+                        class="btn btn-default"
+                        onclick="navigator.clipboard.writeText('http{% if request.is_secure %}s{% endif %}://'+
+                                '{{ request.get_host }}{% url 'group' code=group.code %}').then(() => {
+                                this.textContent = 'Copied';
+                                setTimeout(() => {this.textContent = 'Copy'}, 5000);
+                                },
+                                () => {
+                                this.textContent = 'Could not copy'
+                                setTimeout(() => {this.textContent = 'Copy'}, 5000);
+                                });">
+                    Copy
+                </button>
+            </span>
+        </div>
+    </div>
+    <img src="{{ qr_png_uri }}"
+         alt="Image showing a QR code for the group URL"
+         class="img-responsive img-thumbnail center-block">
+
 {% endblock %}

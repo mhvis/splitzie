@@ -1,5 +1,6 @@
 import base64
 import io
+import random
 
 import qrcode
 import qrcode.image.svg
@@ -158,6 +159,16 @@ class GroupSettleView(GroupMixin, DetailView):
 
 class ExpenseCreateView(GroupMixin, DetailView):
     template_name = "splitzie/expense_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Shuffle participants, to use for the expense form
+        participants = list(self.object.participants.all())
+        random.shuffle(participants)
+        context.update({
+            'participants_shuffle': participants,
+        })
+        return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
