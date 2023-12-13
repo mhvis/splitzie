@@ -13,7 +13,7 @@
               type: 'expense',
               amount: '',
               amounts: {
-                  {% for p in group.participants.all %}{{ p.pk }}: '0.00',{% endfor %}
+                  {% for p in group.participants.all %}{{ p.pk }}: '',{% endfor %}
               },
               divider: new Divider([{% for p in participants_shuffle %}{{ p.pk }},{% endfor %}]),
           }"

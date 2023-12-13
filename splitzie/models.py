@@ -13,6 +13,8 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from splitzie.settle import Settler, SettleEntry
+
 
 class Group(models.Model):
     name = models.CharField(_("name"), max_length=150, default="Group")
@@ -21,6 +23,13 @@ class Group(models.Model):
 
     def get_absolute_url(self):
         return reverse("group", kwargs={"code": self.code})
+
+    def get_moves(self):
+        settler = Settler([SettleEntry(p, p.balance) for p in self.participants.all()])
+        print(settler.creditors, settler.debtors)
+        moves = settler.get_optimal_brute_force()
+        print(moves)
+        return moves
 
     def __str__(self):
         return self.name

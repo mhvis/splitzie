@@ -12,61 +12,75 @@
     </p>
 
     <p>
-    <a href="{% url 'group-settle' code=group.code %}" hx-boost="true" class="btn btn-default">
-        <span class="glyphicon glyphicon-euro"></span>
-        Settle
-    </a>
-    <a href="{% url 'group-edit' code=group.code %}" hx-boost="true" class="btn btn-default">
-        <span class="glyphicon glyphicon-edit"></span>
-        Group info
-    </a>
+
+        <a href="{% url 'expense-create' code=group.code %}" hx-boost="true"
+           class="btn btn-primary {% if group.participants.count < 2 %}disabled{% endif %}">
+            <span class="glyphicon glyphicon-plus"></span>
+            New payment
+        </a>
+
+        <a href="{% url 'group-settle' code=group.code %}" hx-boost="true" class="btn btn-default">
+            <span class="glyphicon glyphicon-euro"></span>
+            Settle
+        </a>
+        <a href="{% url 'group-edit' code=group.code %}" hx-boost="true" class="btn btn-default">
+            <span class="glyphicon glyphicon-edit"></span>
+            Group info
+        </a>
 
     </p>
 
+    {% if group.participants.count < 2 %}
+        <div class="alert alert-info">
+            <span class="glyphicon glyphicon-info-sign"></span>
+            To create a payment, first
+            <a href="{% url 'group-edit' code=group.code %}#participants" hx-boost="true" class="alert-link">add</a>
+            at least two participants to the group.
+        </div>
+    {% endif %}
+
+
     {% if not group.emails.exists %}
         <div class="alert alert-warning">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
             There are no e-mail addresses linked to this group.
-            We recommend <a href="{% url 'group-edit' code=group.code %}#emails" hx-boost="true">linking</a>
+            We recommend
+            <a href="{% url 'group-edit' code=group.code %}#emails" hx-boost="true" class="alert-link">linking</a>
             at least one,
             so it can be used to recover access to the group.
         </div>
     {% endif %}
 
     <h2>Payments</h2>
-    <a href="{% url 'expense-create' code=group.code %}" hx-boost="true"
-       class="btn btn-primary {% if group.participants.count < 2 %}disabled{% endif %}">
-        <span class="glyphicon glyphicon-plus"></span>
-        New
-    </a>
-    {% if group.participants.count < 2 %}
-        <span>To add your first expense, add at least two participants to the group</span>
-    {% endif %}
 
-    <ul>
+    <div class="list-group">
         {% for p in group.payments.all %}
             {% if p.type == "expense" %}
                 {% with e=p.expense %}
-                    <li>
-                        <div>
-                            <a href="{{ e.get_absolute_url }}" hx-boost="true">
-                                {{ e.created_at|date:"SHORT_DATE_FORMAT" }}:
+                    <a href="{{ e.get_absolute_url }}" class="list-group-item" hx-boost="true">
+                        <em>{{ e.created_at|date:"SHORT_DATE_FORMAT" }}</em>
+                        <p class="list-group-item-text">
+                            <strong>
                                 {{ e.abs_amount|euro }} {% if e.is_expense %}paid{% else %}received{% endif %}
                                 by {{ e.payer }}
-                            </a>
-                        </div>
-                        <div>{{ e.description }}</div>
-                    </li>
+                            </strong>
+                        </p>
+                        <p class="list-group-item-text">{{ e.description }}</p>
+                    </a>
                 {% endwith %}
             {% elif p.type == "settle" %}
                 {% with t=p.get_transfer %}
-                    <li>
-                        {{ p.created_at|date:"SHORT_DATE_FORMAT" }}:
-                        {{ t.0.name }} repaid {{ t.2|euro }} to {{ t.1.name }}
-                    </li>
+                    <span class="list-group-item disabled" style="cursor: default;">
+                        <em>{{ p.created_at|date:"SHORT_DATE_FORMAT" }}</em>
+                        <p class="list-group-item-text">
+                            <span class="glyphicon glyphicon-transfer"></span>
+                            <strong>{{ t.0.name }} repaid {{ t.2|euro }} to {{ t.1.name }}</strong>
+                        </p>
+                    </span>
                 {% endwith %}
             {% endif %}
         {% endfor %}
-    </ul>
+    </div>
     {% if not group.payments.exists %}
         <p class="text-muted">No payments yet</p>
     {% endif %}

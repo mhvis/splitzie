@@ -13,17 +13,25 @@
     <template x-data x-if="Object.keys($store.groups.groups).length > 0">
         <div>
             <h3>Recent groups</h3>
-            <ul>
+            <div>
                 <template x-for="[code, group] in Object.entries($store.groups.groups)">
-                    <li>
-                        <a :href="'{% url 'group' code="CODE" %}'.replace('CODE', code)" x-text="group.name"
-                           hx-boost="true"></a>
-                        <button @click="if (confirm('Are you sure you want to remove this group entry? To add it back later, revisit the group URL.')) { $store.groups.remove(code) }">
-                            Leave
-                        </button>
-                    </li>
+                    <div class="panel panel-default" style="position: relative;">
+                        <div class="panel-body" style="display: flex; align-items: center;">
+                            <a :href="'{% url 'group' code="CODE" %}'.replace('CODE', code)"
+                               hx-boost="true"
+                               x-text="group.name"
+                               style="flex-grow: 1;">
+                            </a>
+                            <button class="btn btn-danger btn-sm"
+                                    @click="if (confirm('Are you sure you want to remove this group entry? To add it back later, revisit the group page.')) { $store.groups.remove(code) }">
+                                ×
+{#                                <span class="glyphicon glyphicon-remove-sign"></span>#}
+                                <span class="sr-only">Remove</span>
+                            </button>
+                        </div>
+                    </div>
                 </template>
-            </ul>
+            </div>
         </div>
     </template>
 
@@ -33,23 +41,12 @@
         Get started
     </button>
 
-    <h3>Why is this app better than WieBetaaltWat?</h3>
-    <ul>
-        <li>We support partial settlements between a subset of group participants.</li>
-        <li>
-            We do not push a payment system for settling.
-            Just pay the others using your own familiar banking app, or with cash.
-        </li>
-        {#        <li>This website does not require JavaScript to function (but it does make it better).</li>#}
-    </ul>
-
     <h3>Alpha</h3>
     <p>
         This website is in alpha phase. On the roadmap is:
     </p>
-    <ul class="list-disc list-inside">
+    <ul>
         <li>Dutch translations</li>
-        <li>Dark mode</li>
         <li>Export payments as CSV or Excel</li>
     </ul>
 {% endblock %}

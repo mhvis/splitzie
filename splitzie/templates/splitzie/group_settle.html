@@ -5,85 +5,113 @@
     {% include 'splitzie/snippets/group_back.html' %}
 
     <h2>Balances</h2>
-    <ul>
-        {% for p in group.participants.all %}
-            <li>{{ p.name }}: {{ p.balance|euro }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Settle</h2>
-    <ul id="moves">
-
-    </ul>
-
-    <h4>Enter repay</h4>
-    <p>
-        Enter any repayments made using the form below.
-    </p>
-
-    <form method="post" action="{% url 'group-settle' code=group.code %}" hx-boost="true" hx-push-url="false">
-        {% csrf_token %}
-        <label>
-            <select name="debtor" required onchange="
-                    const creditorSelect = document.querySelector('select[name=creditor]');
-                    creditorSelect.querySelector('option[disabled]').disabled = false;
-                    creditorSelect.querySelector(`option[value='${this.value}']`).disabled = true;
-                    if (creditorSelect.value === this.value) {
-                        creditorSelect.value = creditorSelect.querySelector('option:not([disabled])').value;
-                    }">
+    <div class="row">
+        <div class="col-sm-8 col-md-6">
+            <ul class="list-group">
                 {% for p in group.participants.all %}
-                    <option value="{{ p.pk }}">{{ p.name }}</option>
+                    <li class="list-group-item" style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                        <span>{{ p.name }}</span>
+                        <strong class="pull-right text-{% if p.balance < 0 %}danger{% else %}success{% endif %}">
+                            {{ p.balance|euro }}
+                        </strong>
+                    </li>
                 {% endfor %}
-            </select>
-        </label>
-        <label>
-            repaid
-            <input type="number" step="0.01" required placeholder="0.00" min="0.01" max="99999.99" name="amount">
-        </label>
+            </ul>
+        </div>
+    </div>
 
-        <label>
-            to
-            <select name="creditor" required>
-                {% for p in group.participants.all %}
-                    <option value="{{ p.pk }}"{% if forloop.first %} disabled{% endif %}>{{ p.name }}</option>
-                {% endfor %}
-            </select>
-        </label>
-        <button type="submit">Confirm</button>
-        {{ form.non_field_errors }}
-        {{ form.source.errors }}
-        {{ form.target.errors }}
-        {{ form.amount.errors }}
-    </form>
+    <div x-data="{debtor: '', creditor: '', amount: ''}"
+         x-init="$watch('debtor', (value, oldValue) => {
+            if (creditor === value) {
+                creditor = oldValue;
+            }
+         });">
+        <h2>Settle</h2>
+        <p>
+            Here's a way to settle the balances.
+            Tap an item to fill it in the form below.
+        </p>
+        <div class="row">
+            <div class="col-sm-8 col-md-6">
+                <div class="list-group">
+                    {% for move in group.get_moves %}
+                        <button type="button"
+                                @click="debtor = '{{ move.source.pk }}';
+                                    creditor = '{{ move.target.pk }}';
+                                    amount = '{{ move.amount }}';"
+                                class="list-group-item">
+                            <em>{{ move.source.name }}</em>
+                            pays
+                            <strong>{{ move.amount|euro }}</strong>
+                            to
+                            <em>{{ move.target.name }}</em>
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
+        <h3>Enter repay</h3>
+        <p>
+            Enter any repayments made using this form.
+        </p>
 
+        <form method="post" action="{% url 'group-settle' code=group.code %}"
+              class="form-inline"
+              hx-boost="true"
+              hx-push-url="false">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="debtorSelect" class="sr-only">Repay from</label>
+                <select name="debtor"
+                        required
+                        x-model="debtor"
+                        class="form-control"
+                        id="debtorSelect">
+                    {% for p in group.participants.all %}
+                        <option value="{{ p.pk }}"
+                                {% if forloop.counter == 1 %}selected x-init="debtor = '{{ p.pk }}'"{% endif %}>
+                            {{ p.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="amountField">repaid <span class="sr-only">amount</span></label>
+                <input type="number"
+                       step="0.01"
+                       id="amountField"
+                       class="form-control"
+                       required
+                       placeholder="0.00"
+                       min="0.01"
+                       max="99999.99"
+                       x-model="amount"
+                       name="amount">
+            </div>
+            <div class="form-group">
+                <label for="creditorSelect"><span class="sr-only">repay</span> to</label>
+                <select name="creditor"
+                        x-model="creditor"
+                        class="form-control"
+                        id="creditorSelect"
+                        required>
+                    {% for p in group.participants.all %}
+                        <option value="{{ p.pk }}"
+                                :disabled="debtor === '{{ p.pk }}'"
+                                {% if forloop.counter == 2 %}selected x-init="creditor = '{{ p.pk }}'"{% endif %}>
+                            {{ p.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-    {% include 'splitzie/snippets/settler.html' %}
-    <script>
-        htmx.onLoad(function (content) {
-            const participants = {
-            {% for p in group.participants.all %}
-                {{ p.pk }}: '{{ p.name|escapejs }}',
-            {% endfor %}
-            };
-            const settler = new Settler([
-                {% for p in group.participants.all %}
-                    {'id': {{ p.pk }}, 'balance': {{ p.balance|cents }}},
-                {% endfor %}
-            ]);
-            // Display moves
-            document.getElementById('moves').innerHTML = settler.getMoves().map(
-                (x) =>
-`<li>
-    ${participants[x.from]} pays ${Settler.euroFormat(x.amount)} to ${participants[x.to]}
-    <button type="button" onclick="
-            document.querySelector('select[name=debtor]').value= '${x.from}';
-            document.querySelector('select[name=creditor]').value= '${x.to}';
-            document.querySelector('input[name=amount]').value = '${(x.amount / 100).toFixed(2)}';">
-        Enter
-    </button>
-</li>`
-            ).join('');
-        });
-    </script>
+            <button type="submit" class="btn btn-primary">Confirm</button>
+            {{ form.non_field_errors }}
+            {{ form.source.errors }}
+            {{ form.target.errors }}
+            {{ form.amount.errors }}
+        </form>
+    </div>
+
 {% endblock %}

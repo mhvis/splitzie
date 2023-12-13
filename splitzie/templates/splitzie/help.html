@@ -2,77 +2,79 @@
 
 
 {% block content %}
-    <div class="prose prose-stone md:prose-lg lg:prose-xl">
-        <h2>Usage tips</h2>
+    <div class="row">
+        <div class="col-md-7">
+            <h2>Usage tips</h2>
 
-        <h4>Starting balance</h4>
-        <p>
-            To enter a starting balance, you can create a payment with an amount of
-            0 euros.
-            Set the payment as income and enter the starting balances of the
-            participants in the division section. Enter negative balances using a
-            negative amount.
-        </p>
-        <h4>Custom repayment</h4>
-        <p>
-            The repayment form lets you enter arbitrary repayments.
-            Say you owe 2 euros to Bob and 3 euros to Alice.
-            Instead of repaying both of them, you could also give 5 euros to Bob and ask him to pay the remainder
-            forward.
-            On this website you can enter this as a repayment of 5 euros to Bob.
-            The balances will then change to reflect that Bob now owes 3 euros to Alice.
-        </p>
-        {#    <h4>Settling algorithm</h4>#}
-        {#    <p>#}
-        {#        The algorithm tries to find the minimal number of moves to repay everyone in the group.#}
-        {#    </p>#}
+            <h4>Starting balance</h4>
+            <p>
+                To enter a starting balance, you can create a payment with an amount of
+                0 euros.
+                Set the payment as income and enter the starting balances of the
+                participants in the division section. Enter negative balances using a
+                negative amount.
+            </p>
+            <h4>Custom repayment</h4>
+            <p>
+                The repayment form lets you enter arbitrary repayments.
+                Say you owe 2 euros to Bob and 3 euros to Alice.
+                Instead of repaying both of them, you could also give 5 euros to Bob and ask him to pay the remainder
+                forward.
+                On this website you can enter this as a repayment of 5 euros to Bob.
+                The balances will then change to reflect that Bob now owes 3 euros to Alice.
+            </p>
+            {#    <h4>Settling algorithm</h4>#}
+            {#    <p>#}
+            {#        The algorithm tries to find the minimal number of moves to repay everyone in the group.#}
+            {#    </p>#}
 
-        <h4>About rounding</h4>
-        <p>
-            When a payment is divided, the division amounts may need to be rounded.
-            This means that some participants may get assigned an amount that is one cent
-            higher than other participants, to make sure that the sum of all divisions
-            is exactly equal to the total expense amount.
-            The participants who pay this extra cent are chosen randomly.
-            The difference is always at most one cent.
-        </p>
-        <p>
-            For nerds: it is possible to view the exact division script that is used,
-            by opening the page source code.
-        </p>
-        <h4>Do you have another question?</h4>
-        <p>
-            Feel free to contact me at mail@maartenvisscher.nl for any questions
-            Also if would like to have a new feature added, let me know.
-        </p>
-        <h2>Security</h2>
-        <p>
-            Anyone who has the link of a group, can edit it.
-            So, if a link is compromised, a malicious user could enter new payments.
-            However, it is not possible to delete entered payments,
-            therefore no real harm can be done.
-            If your link is compromised, you can create a new group and set the starting balances
-            as required.
-        </p>
-        <h2>Privacy</h2>
-        <p>
-            We do not use tracking and session cookies,
-            nor do we have an account system or log IP addresses.
-            We take great care to protect the data that is being stored.
-        </p>
-        <h2>About</h2>
-        <p>
-            This app is a hobby project, created because I was annoyed that the
-            widely used apps WieBetaaltWat and Groepie/Tikkie do not allow for
-            partial settlements and that they push their payment system very prominently.
-        </p>
-        <p>
-            This app will remain online and free as long as it is being used. The source code may be available
-            upon request and might be made open source in the future.
-        </p>
-        <p>
-            To contact me, send an e-mail to
-            <a href="mailto:mail@maartenvisscher.nl" target="_blank">mail@maartenvisscher.nl</a>.
-        </p>
+            <h4>About rounding</h4>
+            <p>
+                When a payment is divided, the division amounts may need to be rounded.
+                This means that some participants may get assigned an amount that is one cent
+                higher than other participants, to make sure that the sum of all divisions
+                is exactly equal to the total expense amount.
+                The participants who pay this extra cent are chosen randomly.
+                The difference is always at most one cent.
+            </p>
+            <p>
+                For nerds: it is possible to view the exact division script that is used,
+                by opening the page source code.
+            </p>
+            <h4>Do you have another question?</h4>
+            <p>
+                Feel free to contact me at mail@maartenvisscher.nl for any questions
+                Also if would like to have a new feature added, let me know.
+            </p>
+        </div>
+        <div class="col-md-5">
+            <h2>About</h2>
+            <p>
+                This app is a hobby project, created because I was annoyed that the
+                widely used apps WieBetaaltWat and Groepie do not allow for
+                partial settlements and push their payment system very prominently.
+            </p>
+            <p>
+                This app will remain online and free as long as it is being used. The source code may be available
+                upon request.
+            </p>
+            <p>
+                To contact me, send an e-mail to
+                <a href="mailto:mail@maartenvisscher.nl" target="_blank">mail@maartenvisscher.nl</a>.
+            </p>
+            <h3>Privacy</h3>
+            <p>
+                This website does not use tracking and session cookies.
+                There is no account system and IP address are not logged.
+            </p>
+            <h3>Security</h3>
+            <p>
+                Anyone with the link of a group can edit the group.
+                However, it is not possible to delete entered payments.
+                If your group link was stolen, you can create a new group.
+            </p>
+
+
+        </div>
     </div>
 {% endblock %}

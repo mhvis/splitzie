@@ -13,7 +13,9 @@
         <button type="submit" name="form" value="name" class="btn btn-primary">Save</button>
         {% if request.POST.form == 'name' %}<em>Saved</em>{% endif %}
     </form>
-    <h2>Participants</h2>
+    
+    <hr>
+    <h2 id="participants">Participants</h2>
     <ul class="list-group">
         {% for participant in group.participants.all %}
             <li class="list-group-item">
@@ -47,7 +49,7 @@
         </button>
     </form>
 
-
+    <hr>
     <h2 id="emails">E-mails</h2>
     <p>
         Linked e-mails receive a notification when a payment was added.
@@ -83,7 +85,7 @@
         </button>
     </form>
 
-
+    <hr>
     <h2>Share</h2>
     <p>
         To share this group with someone, send them the group URL or let them scan the QR code.
@@ -95,7 +97,7 @@
             <input type="text"
                    readonly
                    class="form-control" id="groupUrlField"
-                   value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}{% url 'group' code=group.code %}">
+                   value="{% include 'splitzie/snippets/base_url.html' %}{% url 'group' code=group.code %}">
             {# @formatter:on #}
             <span class="input-group-btn">
                 <button type="button"

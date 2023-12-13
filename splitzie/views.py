@@ -5,6 +5,7 @@ import random
 import qrcode
 import qrcode.image.svg
 from django.core.exceptions import BadRequest
+from django.db import transaction
 from django.forms import modelform_factory
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -18,6 +19,7 @@ from django.views.generic import (
 from django.views.generic.detail import SingleObjectMixin
 
 from splitzie.forms import ExpenseForm, SettleForm
+from splitzie.mail import send_rendered_mail
 from splitzie.models import Group, Expense, Participant, LinkedEmail, Payment
 
 
@@ -95,48 +97,83 @@ class GroupEditView(GroupMixin, DetailView):
         )
         return context
 
+    def handle_name(self):
+        form = modelform_factory(Group, fields=["name"])(
+            self.request.POST, instance=self.object
+        )
+        if not form.is_valid():
+            raise BadRequest
+        form.save()
+
+    def handle_participant_create(self):
+        form = modelform_factory(Participant, fields=["name"])(
+            self.request.POST, instance=Participant(group=self.object)
+        )
+        if not form.is_valid():
+            raise BadRequest
+        form.save()
+
+    def handle_participant_delete(self):
+        try:
+            participant = Participant.objects.get(
+                group=self.object, pk=self.request.POST.get("participant")
+            )
+        except Participant.DoesNotExist:
+            raise BadRequest
+        participant.delete()
+
+    def handle_email_create(self):
+        form = modelform_factory(LinkedEmail, fields=["email"])(
+            self.request.POST, instance=LinkedEmail(group=self.object)
+        )
+        if not form.is_valid():
+            raise BadRequest
+        with transaction.atomic():
+            linked_email = form.save()  # type: LinkedEmail
+            send_rendered_mail(
+                "splitzie/mails/email_added.html",
+                "splitzie/mails/email_added_subject.txt",
+                [linked_email.email],
+                {
+                    "group": self.object,
+                    "request": self.request,
+                },
+            )
+
+    def handle_email_delete(self):
+        try:
+            email = LinkedEmail.objects.get(
+                group=self.object, pk=self.request.POST.get("email")
+            )
+        except LinkedEmail.DoesNotExist:
+            raise BadRequest
+        with transaction.atomic():
+            email.delete()
+            send_rendered_mail(
+                "splitzie/mails/email_removed.html",
+                "splitzie/mails/email_removed_subject.txt",
+                [email.email],
+                {
+                    "group": self.object,
+                    "request": self.request,
+                },
+            )
+
     def post(self, request, *args, **kwargs):
-        group = self.object = self.get_object()
+        self.object = self.get_object()
         action = request.POST.get("form")
 
         # Do the posted action
         if action == "name":
-            form = modelform_factory(Group, fields=["name"])(
-                request.POST, instance=group
-            )
-            if not form.is_valid():
-                raise BadRequest
-            form.save()
+            self.handle_name()
         elif action == "participant-create":
-            form = modelform_factory(Participant, fields=["name"])(
-                request.POST, instance=Participant(group=group)
-            )
-            if not form.is_valid():
-                raise BadRequest
-            form.save()
+            self.handle_participant_create()
         elif action == "participant-delete":
-            try:
-                participant = Participant.objects.get(
-                    group=group, pk=request.POST.get("participant")
-                )
-            except Participant.DoesNotExist:
-                raise BadRequest
-            participant.delete()
+            self.handle_participant_delete()
         elif action == "email-create":
-            form = modelform_factory(LinkedEmail, fields=["email"])(
-                request.POST, instance=LinkedEmail(group=group)
-            )
-            if not form.is_valid():
-                raise BadRequest
-            form.save()
+            self.handle_email_create()
         elif action == "email-delete":
-            try:
-                email = LinkedEmail.objects.get(
-                    group=group, pk=request.POST.get("email")
-                )
-            except LinkedEmail.DoesNotExist:
-                raise BadRequest
-            email.delete()
+            self.handle_email_delete()
         else:
             raise BadRequest
 
@@ -165,9 +202,11 @@ class ExpenseCreateView(GroupMixin, DetailView):
         # Shuffle participants, to use for the expense form
         participants = list(self.object.participants.all())
         random.shuffle(participants)
-        context.update({
-            'participants_shuffle': participants,
-        })
+        context.update(
+            {
+                "participants_shuffle": participants,
+            }
+        )
         return context
 
     def post(self, request, *args, **kwargs):
