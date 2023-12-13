@@ -77,14 +77,21 @@ class Settler:
 
         return moves
 
-    def get_optimal_brute_force(self) -> list[Move]:
-        """Will take ages."""
+    def get_optimal_brute_force(self, limit=7) -> list[Move]:
+        """Will take ages when group is moderately large.
+
+        Args:
+            limit: When the number of creditors or debtors is larger than the
+                limit, we don't find the optimal but just return *a* solution.
+        """
+        if len(self.creditors) + len(self.debtors) > limit:
+            return Settler.get_moves(self.creditors, self.debtors)
+
         optimal = None
 
         for credit_perm in permutations(self.creditors):
             for debtor_perm in permutations(self.debtors):
                 moves = Settler.get_moves(credit_perm, debtor_perm)
-                print(credit_perm, debtor_perm, moves)
                 if optimal is None or len(moves) < len(optimal):
                     optimal = moves
 
