@@ -4,20 +4,43 @@
 {% block content %}
     {% include 'splitzie/snippets/group_back.html' with group=expense.group %}
 
-    <h3>{{ expense.description }}</h3>
-    <p>
-        {{ expense.abs_amount|euro }} {% if expense.is_expense %}paid{% else %}received{% endif %}
-        by
-        {{ expense.payer.name }}
-    </p>
+    <h2>{% if expense.is_expense %}Expense{% else %}Income{% endif %}</h2>
 
-    <ul>
-        {% for e in expense.entries.all %}
-            <li>{{ e.participant.name }}: [balance change {% if e.amount > 0 %}+{% endif %}{{ e.amount|euro }}]</li>
-        {% endfor %}
-    </ul>
+    <div class="row">
+        <div class="col-sm-2"><strong>Date</strong></div>
+        <div class="col-sm-10"><p>{{ expense.created_at|date:"SHORT_DATETIME_FORMAT" }}</p></div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-2"><strong>Description</strong></div>
+        <div class="col-sm-10"><p>{{ expense.description }}</p></div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-2"><strong>Amount</strong></div>
+        <div class="col-sm-10"><p>{{ expense.abs_amount|euro }}</p></div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-2"><strong>{% if expense.is_expense %}Paid{% else %}Received{% endif %} by</strong></div>
+        <div class="col-sm-10"><p>{{ expense.payer.name }}</p></div>
+    </div>
+
+    <h3>Division</h3>
+    {% for e, amount in expense.get_division %}
+        <div class="row">
+            <div class="col-sm-2"><strong>{{ e.participant.name }}</strong></div>
+            <div class="col-sm-10">
+                <p>
+                    {{ amount|euro }}<br>
+                    <small class="text-muted">Balance change {% if e.amount > 0 %}+{% endif %}{{ e.amount|euro }}</small>
+                </p>
+            </div>
+        </div>
+    {% endfor %}
 
     {% if expense.image %}
+        <h3>Receipt</h3>
         <img src="{{ expense.image.url }}" alt="Receipt" class="img-responsive img-thumbnail">
     {% endif %}
 

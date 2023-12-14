@@ -4,59 +4,72 @@
 {% block content %}
     <div class="row">
         <div class="col-md-7">
-            <h2>Usage tips</h2>
+            <h2>Q&A</h2>
 
-            <h4>Starting balance</h4>
-            <p>
-                To enter a starting balance, you can create a payment with an amount of
-                0 euros.
-                Set the payment as income and enter the starting balances of the
-                participants in the division section. Enter negative balances using a
-                negative amount.
-            </p>
-            <h4>Custom repayment</h4>
-            <p>
-                The repayment form lets you enter arbitrary repayments.
-                Say you owe 2 euros to Bob and 3 euros to Alice.
-                Instead of repaying both of them, you could also give 5 euros to Bob and ask him to pay the remainder
-                forward.
-                On this website you can enter this as a repayment of 5 euros to Bob.
-                The balances will then change to reflect that Bob now owes 3 euros to Alice.
-            </p>
+            <details style="margin-bottom: 10px;">
+                <summary><strong>How to enter a starting balance?</strong></summary>
+                <p>
+                    A way to enter a starting balance is to create a payment
+                    with amount 0 and type income.
+                    Then enter the starting balances in the division fields,
+                    with negative balances as a negative value.
+                </p>
+                <p>
+                    Entering a payment in this way will modify the balances exactly
+                    as inputted in the division fields.
+                </p>
+            </details>
+
+            <details style="margin-bottom: 10px;">
+                <summary><strong>What can you use custom repayments for?</strong></summary>
+                <p>
+                    The repayment form on the Settle page lets you enter arbitrary repayments.
+                    For example, if you owe 2 euros to Bob and 3 euros to Alice,
+                    instead of repaying both of them, you could also give 5
+                    euros to Bob and ask him to pay the remainder forward.
+                </p>
+                <p>
+                    Enter the 5 euros repayment into the form, and the balances will change
+                    so that Bob now owes 3 euros to Alice.
+                </p>
+            </details>
+
             {#    <h4>Settling algorithm</h4>#}
             {#    <p>#}
             {#        The algorithm tries to find the minimal number of moves to repay everyone in the group.#}
             {#    </p>#}
 
-            <h4>About rounding</h4>
+            <details style="margin-bottom: 10px;">
+                <summary><strong>How are division amounts rounded?</strong></summary>
+                <p>
+                    When a payment is divided, the division amounts may need to be rounded.
+                    This means that some participants will get assigned an amount that is one cent
+                    higher than other participants, to make sure that the sum of all divisions
+                    is exactly equal to the total expense amount.
+                    The participants who pay this extra cent are chosen randomly.
+                    The difference is always at most one cent.
+                </p>
+                <p>
+                    For nerds: you can view the division script in the page source code (/static/splitzie.js).
+                </p>
+            </details>
+
+            <h4 style="margin-top: 20px;">Question not listed here?</h4>
             <p>
-                When a payment is divided, the division amounts may need to be rounded.
-                This means that some participants may get assigned an amount that is one cent
-                higher than other participants, to make sure that the sum of all divisions
-                is exactly equal to the total expense amount.
-                The participants who pay this extra cent are chosen randomly.
-                The difference is always at most one cent.
-            </p>
-            <p>
-                For nerds: it is possible to view the exact division script that is used,
-                by opening the page source code.
-            </p>
-            <h4>Do you have another question?</h4>
-            <p>
-                Feel free to contact me at mail@maartenvisscher.nl for any questions
-                Also if would like to have a new feature added, let me know.
+                Send an e-mail to <a href="mailto:mail@maartenvisscher.nl">mail@maartenvisscher.nl</a>.
             </p>
         </div>
         <div class="col-md-5">
             <h2>About</h2>
             <p>
                 This app is a hobby project, created because I was annoyed that the
-                widely used apps WieBetaaltWat and Groepie do not allow for
-                partial settlements and push their payment system very prominently.
+                widely used Dutch apps WieBetaaltWat and Groepie do not allow for
+                partial settlements (between a subset of participants),
+                and that they want you to link your bank account for settling.
             </p>
             <p>
-                This app will remain online and free as long as it is being used. The source code may be available
-                upon request.
+                This app will remain online and free as long as it is being used. The source code may be made
+                open source if there is interest in that.
             </p>
             <p>
                 To contact me, send an e-mail to
@@ -64,14 +77,14 @@
             </p>
             <h3>Privacy</h3>
             <p>
-                This website does not use tracking and session cookies.
-                There is no account system and IP address are not logged.
+                This website does not use tracking and session cookies
+                and does not log IP addresses.
+                There is no account system.
             </p>
             <h3>Security</h3>
             <p>
                 Anyone with the link of a group can edit the group.
-                However, it is not possible to delete entered payments.
-                If your group link was stolen, you can create a new group.
+                If your group link was stolen, create a new group.
             </p>
 
 

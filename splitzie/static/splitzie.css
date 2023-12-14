@@ -11,3 +11,14 @@
   z-index: 1;
   content: "";
 }
+
+/*
+The older version of normalize.css included in Bootstrap removes the details/summary dropdown.
+ */
+details {
+  display: block;
+}
+summary {
+  display: list-item;
+  cursor: default;
+}

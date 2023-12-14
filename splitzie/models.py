@@ -26,9 +26,7 @@ class Group(models.Model):
 
     def get_moves(self):
         settler = Settler([SettleEntry(p, p.balance) for p in self.participants.all()])
-        print(settler.creditors, settler.debtors)
         moves = settler.get_optimal_brute_force()
-        print(moves)
         return moves
 
     def __str__(self):
@@ -93,6 +91,11 @@ class Payment(models.Model):
         if sum(e.amount for e in entries) != 0:
             raise ValueError("Sum of entries is not 0!")
 
+        # Sanity check: participants must be part of the same group
+        for entry in entries:
+            if entry.participant.group != self.group:
+                raise ValueError("Participant is not part of this group")
+
         with transaction.atomic():
             self.save()
             for e in entries:
@@ -142,6 +145,16 @@ class Expense(Payment):
 
     def get_absolute_url(self):
         return reverse("expense", kwargs={"code": self.group.code, "pk": self.pk})
+
+    def get_division(self) -> list[tuple[Entry, decimal.Decimal]]:
+        """Returns the division as how it was entered in the form originally."""
+        sign = -1 if self.is_expense() else 1
+        return [
+            (
+                e,
+                sign * (e.amount if e.participant != self.payer else e.amount + self.amount)
+            ) for e in self.entries.all()
+        ]
 
 
 class EntryQuerySet(models.QuerySet):

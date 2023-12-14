@@ -7,7 +7,7 @@ import qrcode.image.svg
 from django.core.exceptions import BadRequest
 from django.db import transaction
 from django.forms import modelform_factory
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -43,8 +43,11 @@ class GroupCreateView(View):
         group = Group.objects.create()
         url = reverse("group", args=(group.code,))
 
-        response = render(request, "splitzie/group.html", {"group": group})
-        response.headers["HX-Push-Url"] = url
+        if request.headers.get("HX-Request"):
+            response = render(request, "splitzie/group.html", {"group": group})
+            response.headers["HX-Push-Url"] = url
+        else:
+            response = HttpResponseRedirect(url)
         return response
 
 

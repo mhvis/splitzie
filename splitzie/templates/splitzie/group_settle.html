@@ -40,11 +40,11 @@
                                     creditor = '{{ move.target.pk }}';
                                     amount = '{{ move.amount }}';"
                                 class="list-group-item">
-                            <em>{{ move.source.name }}</em>
+                            <strong>{{ move.source.name }}</strong>
                             pays
                             <strong>{{ move.amount|euro }}</strong>
                             to
-                            <em>{{ move.target.name }}</em>
+                            <strong>{{ move.target.name }}</strong>
                         </button>
                     {% endfor %}
                 </div>

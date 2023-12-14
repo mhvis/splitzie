@@ -6,8 +6,7 @@
     </div>
     <p>
         Easily divide group expenses over all participants.
-        No account required.
-        Works for any type of expenses, income and settlements between group participants.
+        No account needed.
     </p>
 
     <template x-data x-if="Object.keys($store.groups.groups).length > 0">
@@ -35,11 +34,15 @@
         </div>
     </template>
 
-    <button hx-post="{% url 'group-create' %}" hx-target="body" x-data
-            x-text="Object.keys($store.groups.groups).length > 0 ? 'Create new group' : 'Get started'"
-            class="btn btn-primary">
-        Get started
-    </button>
+    <form method="post" action="{% url 'group-create' %}" hx-boost="true">
+        {% csrf_token %}
+        <button type="submit"
+                x-data
+                x-text="Object.keys($store.groups.groups).length > 0 ? 'Create new group' : 'Get started'"
+                class="btn btn-primary">
+            Get started
+        </button>
+    </form>
 
     <h3>Alpha</h3>
     <p>
