@@ -40,12 +40,12 @@
                         <button type="button"
                                 @click="debtor = '{{ move.source.pk }}';
                                     creditor = '{{ move.target.pk }}';
-                                    amount = '{{ move.amount }}';"
+                                    amount = '{{ move.amount|stringformat:".2f" }}';"
                                 class="list-group-item">
-                            {% blocktrans trimmed with src=move.source.name target=move.target.name amount=move.amount|euro %}
+                            {% blocktrans trimmed with src=move.source.name target=move.target.name amount=move.amount %}
                                 <strong>{{ src }}</strong>
                                 pays
-                                <strong>{{ amount }}</strong>
+                                <strong>EUR {{ amount }}</strong>
                                 to
                                 <strong>{{ target }}</strong>
                             {% endblocktrans %}
