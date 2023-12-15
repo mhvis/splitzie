@@ -1,57 +1,58 @@
 {% extends "splitzie/base.html" %}
-{% load currency %}
+{% load currency i18n %}
 
 {% block content %}
     <h1 x-init="$store.groups.add('{{ group.code }}', '{{ group.name|escapejs }}')">{{ group.name }}</h1>
     <p class="lead text-muted">
         {% if not group.participants.exists %}
-            No participants yet
+            {% translate 'No participants yet' %}
         {% else %}
             {{ group.participants.all|join:", " }}
         {% endif %}
     </p>
 
     <p>
-
-        <a href="{% url 'expense-create' code=group.code %}" hx-boost="true"
+        <a href="{% url 'expense-create' code=group.code %}"
+           hx-boost="true"
            class="btn btn-primary {% if group.participants.count < 2 %}disabled{% endif %}">
             <span class="glyphicon glyphicon-plus"></span>
-            New payment
+            {% translate 'New payment' %}
         </a>
 
         <a href="{% url 'group-settle' code=group.code %}" hx-boost="true" class="btn btn-default">
             <span class="glyphicon glyphicon-euro"></span>
-            Settle
+            {% translate 'Settle' %}
         </a>
         <a href="{% url 'group-edit' code=group.code %}" hx-boost="true" class="btn btn-default">
             <span class="glyphicon glyphicon-edit"></span>
-            Group info
+            {% translate 'Group info' %}
         </a>
-
     </p>
 
+    {% url 'group-edit' code=group.code as group_edit_url %}
     {% if group.participants.count < 2 %}
         <div class="alert alert-info">
             <span class="glyphicon glyphicon-info-sign"></span>
-            To create a payment, first
-            <a href="{% url 'group-edit' code=group.code %}#participants" hx-boost="true" class="alert-link">add</a>
-            at least two participants to the group.
+            {% blocktrans trimmed %}
+                To create a payment, first
+                <a href="{{ group_edit_url }}#participants" hx-boost="true" class="alert-link">add</a>
+                at least two participants to the group.
+            {% endblocktrans %}
         </div>
     {% endif %}
-
 
     {% if not group.emails.exists %}
         <div class="alert alert-warning">
             <span class="glyphicon glyphicon-exclamation-sign"></span>
-            There are no e-mail addresses linked to this group.
-            We recommend
-            <a href="{% url 'group-edit' code=group.code %}#emails" hx-boost="true" class="alert-link">linking</a>
-            at least one,
-            so it can be used to recover access to the group.
+            {% blocktrans trimmed %}
+                There are no e-mail addresses linked to this group. We recommend
+                <a href="{{ group_edit_url }}#emails" hx-boost="true" class="alert-link">linking</a>
+                at least one, so it can be used to recover access to the group.
+            {% endblocktrans %}
         </div>
     {% endif %}
 
-    <h2>Payments</h2>
+    <h2>{% translate "Payments" %}</h2>
 
     <div class="list-group">
         {% for p in group.payments.all %}
@@ -82,6 +83,6 @@
         {% endfor %}
     </div>
     {% if not group.payments.exists %}
-        <p class="text-muted">No payments yet</p>
+        <p class="text-muted">{% translate "No payments yet" %}</p>
     {% endif %}
 {% endblock %}

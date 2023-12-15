@@ -2,11 +2,13 @@ from decimal import Decimal
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
 from splitzie.models import Expense, Participant, Entry, Payment
 
 
 class ExpenseForm(forms.ModelForm):
-    type = forms.ChoiceField(choices=[("expense", "Expense"), ("income", "Income")])
+    type = forms.ChoiceField(choices=[("expense", _("Expense")), ("income", _("Income"))])
     amount = forms.DecimalField(
         max_digits=7, decimal_places=2, min_value=Decimal("0.00")
     )

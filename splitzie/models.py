@@ -18,8 +18,12 @@ from splitzie.settle import Settler, SettleEntry
 
 class Group(models.Model):
     name = models.CharField(_("name"), max_length=150, default="Group")
-    code = models.CharField(max_length=150, default=token_urlsafe, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    code = models.CharField(_("code"), max_length=150, default=token_urlsafe, unique=True)
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
+
+    class Meta:
+        verbose_name = _("group")
+        verbose_name_plural = _("groups")
 
     def get_absolute_url(self):
         return reverse("group", kwargs={"code": self.code})
@@ -35,7 +39,7 @@ class Group(models.Model):
 
 class LinkedEmail(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="emails")
-    email = models.EmailField()
+    email = models.EmailField(_("e-mail"))
 
     class Meta:
         constraints = [
@@ -50,10 +54,12 @@ class Participant(models.Model):
     group = models.ForeignKey(
         Group, on_delete=models.CASCADE, related_name="participants"
     )
-    name = models.CharField(max_length=150)
+    name = models.CharField(_("name"), max_length=150)
 
     class Meta:
         ordering = ("name",)
+        verbose_name = _("participant")
+        verbose_name_plural = _("participants")
 
     def __str__(self):
         return self.name
@@ -65,7 +71,7 @@ class Participant(models.Model):
 
 class Payment(models.Model):
     group = models.ForeignKey(Group, on_delete=models.PROTECT, related_name="payments")
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
 
     type = models.CharField(
         max_length=10,
@@ -77,6 +83,8 @@ class Payment(models.Model):
 
     class Meta:
         ordering = ("-created_at",)
+        verbose_name = _("payment")
+        verbose_name_plural = _("payments")
 
     def save_with_entries(self, entries: Iterable[Entry]):
         """Cleans the entries and atomically saves this payment with entries."""
@@ -128,14 +136,18 @@ class Expense(Payment):
     #
     # An amount of 0 is allowed. This allows for setting a starting balance.
     # We'll show it as income of 0 euros.
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    amount = models.DecimalField(_("amount"), max_digits=7, decimal_places=2)
     payer = models.ForeignKey(
         Participant,
         on_delete=models.PROTECT,
         related_name="expenses",
     )
-    description = models.CharField(max_length=150)
+    description = models.CharField(_("description"), max_length=150)
     image = models.ImageField(upload_to=expense_image_path, blank=True)
+
+    class Meta:
+        verbose_name = _("expense")
+        verbose_name_plural = _("expenses")
 
     def abs_amount(self):
         return abs(self.amount)
@@ -181,7 +193,7 @@ class Entry(models.Model):
     participant = models.ForeignKey(
         Participant, on_delete=models.PROTECT, related_name="entries"
     )
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    amount = models.DecimalField(_("amount"), max_digits=7, decimal_places=2)
 
     objects = EntryQuerySet.as_manager()
 

@@ -1,10 +1,10 @@
 {% extends 'splitzie/base.html' %}
-{% load currency %}
+{% load currency i18n %}
 
 {% block content %}
     {% include 'splitzie/snippets/group_back.html' %}
 
-    <h2>Balances</h2>
+    <h2>{% translate 'Balances' %}</h2>
     <div class="row">
         <div class="col-sm-8 col-md-6">
             <ul class="list-group">
@@ -26,10 +26,12 @@
                 creditor = oldValue;
             }
          });">
-        <h2>Settle</h2>
+        <h2>{% translate 'Settle' %}</h2>
         <p>
-            Here's a way to settle the balances.
-            Tap an item to fill it in the form below.
+            {% blocktrans trimmed %}
+                Here's a way to settle the balances.
+                Tap an item to fill it in the form below.
+            {% endblocktrans %}
         </p>
         <div class="row">
             <div class="col-sm-8 col-md-6">
@@ -40,20 +42,22 @@
                                     creditor = '{{ move.target.pk }}';
                                     amount = '{{ move.amount }}';"
                                 class="list-group-item">
-                            <strong>{{ move.source.name }}</strong>
-                            pays
-                            <strong>{{ move.amount|euro }}</strong>
-                            to
-                            <strong>{{ move.target.name }}</strong>
+                            {% blocktrans trimmed with src=move.source.name target=move.target.name amount=move.amount|euro %}
+                                <strong>{{ src }}</strong>
+                                pays
+                                <strong>{{ amount }}</strong>
+                                to
+                                <strong>{{ target }}</strong>
+                            {% endblocktrans %}
                         </button>
                     {% endfor %}
                 </div>
             </div>
         </div>
 
-        <h3>Enter repay</h3>
+        <h3>{% translate 'Enter repay' %}</h3>
         <p>
-            Enter any repayments made using this form.
+            {% translate 'Enter any repayments made using this form.' %}
         </p>
 
         <form method="post" action="{% url 'group-settle' code=group.code %}"
@@ -106,7 +110,7 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Confirm</button>
+            <button type="submit" class="btn btn-primary">{% translate 'Confirm' %}</button>
             {{ form.non_field_errors }}
             {{ form.source.errors }}
             {{ form.target.errors }}

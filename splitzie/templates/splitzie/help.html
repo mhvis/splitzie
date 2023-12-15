@@ -1,5 +1,5 @@
 {% extends 'splitzie/base.html' %}
-
+{% load i18n %}
 
 {% block content %}
     <div class="row">
@@ -60,34 +60,40 @@
             </p>
         </div>
         <div class="col-md-5">
-            <h2>About</h2>
+            <h2>{% translate 'About' %}</h2>
             <p>
-                This app is a hobby project, created because I was annoyed that the
-                widely used Dutch apps WieBetaaltWat and Groepie do not allow for
-                partial settlements (between a subset of participants),
-                and that they want you to link your bank account for settling.
+                {% blocktrans trimmed %}
+                    This app is a hobby project, created because I was annoyed that the
+                    widely used Dutch apps WieBetaaltWat and Groepie do not allow for
+                    partial settlements (between a subset of participants),
+                    and that they want you to link your bank account for settling.
+                {% endblocktrans %}
             </p>
             <p>
-                This app will remain online and free as long as it is being used. The source code may be made
-                open source if there is interest in that.
+                {% blocktrans trimmed %}
+                    This app will remain online and free as long as it is being used. The source code may be made
+                    open source if there is interest in that.
+                {% endblocktrans %}
             </p>
             <p>
-                To contact me, send an e-mail to
-                <a href="mailto:mail@maartenvisscher.nl" target="_blank">mail@maartenvisscher.nl</a>.
+                {% blocktrans trimmed with mailto='<a href="mailto:mail@maartenvisscher.nl" target="_blank">mail@maartenvisscher.nl</a>' %}
+                    To contact me, send an e-mail to {{ mailto }}.
+                {% endblocktrans %}
             </p>
-            <h3>Privacy</h3>
+            <h3>{% translate 'Privacy' %}</h3>
             <p>
-                This website does not use tracking and session cookies
-                and does not log IP addresses.
-                There is no account system.
+                {% blocktrans trimmed %}
+                    This website does not use tracking and session cookies and does not log IP addresses.
+                    There is no account system.
+                {% endblocktrans %}
             </p>
-            <h3>Security</h3>
+            <h3>{% translate 'Security' %}</h3>
             <p>
-                Anyone with the link of a group can edit the group.
-                If your group link was stolen, create a new group.
+                {% blocktrans trimmed %}
+                    Anyone with the link of a group can edit the group.
+                    If your group link was stolen, create a new group.
+                {% endblocktrans %}
             </p>
-
-
         </div>
     </div>
 {% endblock %}

@@ -1,31 +1,32 @@
 {% extends "splitzie/base.html" %}
+{% load i18n %}
 
 {% block content %}
-    <div class="page-header">
-        <h1>Splitzie</h1>
-    </div>
-    <p>
-        Easily divide group expenses over all participants.
-        No account needed.
-    </p>
+    <div class="page-header"><h1>Splitzie</h1></div>
+    <p>{% translate "Easily divide group expenses over all participants. No account needed." %}</p>
 
     <template x-data x-if="Object.keys($store.groups.groups).length > 0">
-        <div>
-            <h3>Recent groups</h3>
+        <div x-from-template>
+            <h3>{% translate "Recent groups" %}</h3>
             <div>
                 <template x-for="[code, group] in Object.entries($store.groups.groups)">
-                    <div class="panel panel-default" style="position: relative;">
-                        <div class="panel-body" style="display: flex; align-items: center;">
+                    <div class="panel panel-default"
+                         x-from-template
+                         style="position: relative;">
+                        <div class="panel-body"
+                             style="display: flex; align-items: center;">
                             <a :href="'{% url 'group' code="CODE" %}'.replace('CODE', code)"
                                hx-boost="true"
                                x-text="group.name"
                                style="flex-grow: 1;">
                             </a>
                             <button class="btn btn-danger btn-sm"
-                                    @click="if (confirm('Are you sure you want to remove this group entry? To add it back later, revisit the group page.')) { $store.groups.remove(code) }">
+                                    @click="
+                                        if (confirm('{% translate 'Are you sure you want to remove this group entry? To add it back later, revisit the group page.' %}')) {
+                                            store.groups.remove(code)
+                                        }">
                                 ×
-{#                                <span class="glyphicon glyphicon-remove-sign"></span>#}
-                                <span class="sr-only">Remove</span>
+                                <span class="sr-only">{% translate 'Remove' %}</span>
                             </button>
                         </div>
                     </div>
@@ -38,9 +39,9 @@
         {% csrf_token %}
         <button type="submit"
                 x-data
-                x-text="Object.keys($store.groups.groups).length > 0 ? 'Create new group' : 'Get started'"
+                x-text="Object.keys($store.groups.groups).length > 0 ? '{% translate 'Create new group' %}' : '{% translate 'Get started' %}'"
                 class="btn btn-primary">
-            Get started
+            {% translate 'Get started' %}
         </button>
     </form>
 

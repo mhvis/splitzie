@@ -1,6 +1,6 @@
-<p>
+{% load i18n %}<p>
     <a href="{% url 'group' code=group.code %}" hx-boost="true" class="btn btn-default">
         <span class="glyphicon glyphicon-chevron-left"></span>
-        Back to group
+        {% translate 'Back to group' %}
     </a>
 </p>

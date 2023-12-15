@@ -1,47 +1,49 @@
 {% extends 'splitzie/base.html' %}
-{% load currency %}
+{% load currency i18n %}
 
 {% block content %}
     {% include 'splitzie/snippets/group_back.html' with group=expense.group %}
 
-    <h2>{% if expense.is_expense %}Expense{% else %}Income{% endif %}</h2>
+    <h2>{% if expense.is_expense %}{% translate 'Expense' %}{% else %}{% translate 'Income' %}{% endif %}</h2>
 
     <div class="row">
-        <div class="col-sm-2"><strong>Date</strong></div>
+        <div class="col-sm-2"><strong>{% translate 'Date' %}</strong></div>
         <div class="col-sm-10"><p>{{ expense.created_at|date:"SHORT_DATETIME_FORMAT" }}</p></div>
     </div>
 
     <div class="row">
-        <div class="col-sm-2"><strong>Description</strong></div>
+        <div class="col-sm-2"><strong>{% translate 'Description' %}</strong></div>
         <div class="col-sm-10"><p>{{ expense.description }}</p></div>
     </div>
 
     <div class="row">
-        <div class="col-sm-2"><strong>Amount</strong></div>
+        <div class="col-sm-2"><strong>{% translate 'Amount' %}</strong></div>
         <div class="col-sm-10"><p>{{ expense.abs_amount|euro }}</p></div>
     </div>
 
     <div class="row">
-        <div class="col-sm-2"><strong>{% if expense.is_expense %}Paid{% else %}Received{% endif %} by</strong></div>
+        <div class="col-sm-2"><strong>{% if expense.is_expense %}{% translate 'Paid by' %}{% else %}
+            {% translate 'Received by' %}{% endif %}</strong></div>
         <div class="col-sm-10"><p>{{ expense.payer.name }}</p></div>
     </div>
 
-    <h3>Division</h3>
+    <h3>{% translate 'Division' %}</h3>
     {% for e, amount in expense.get_division %}
         <div class="row">
             <div class="col-sm-2"><strong>{{ e.participant.name }}</strong></div>
             <div class="col-sm-10">
                 <p>
                     {{ amount|euro }}<br>
-                    <small class="text-muted">Balance change {% if e.amount > 0 %}+{% endif %}{{ e.amount|euro }}</small>
+                    <small class="text-muted">{% translate 'Balance change' %} {% if e.amount > 0 %}
+                        +{% endif %}{{ e.amount|euro }}</small>
                 </p>
             </div>
         </div>
     {% endfor %}
 
     {% if expense.image %}
-        <h3>Receipt</h3>
-        <img src="{{ expense.image.url }}" alt="Receipt" class="img-responsive img-thumbnail">
+        <h3>{% translate 'Receipt' %}</h3>
+        <img src="{{ expense.image.url }}" alt="{% translate 'Receipt' %}" class="img-responsive img-thumbnail">
     {% endif %}
 
 {% endblock %}

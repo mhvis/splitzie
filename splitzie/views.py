@@ -134,7 +134,7 @@ class GroupEditView(GroupMixin, DetailView):
         with transaction.atomic():
             linked_email = form.save()  # type: LinkedEmail
             send_rendered_mail(
-                "splitzie/mails/email_added.html",
+                "splitzie/mails/email_added.txt",
                 "splitzie/mails/email_added_subject.txt",
                 [linked_email.email],
                 {
@@ -153,7 +153,7 @@ class GroupEditView(GroupMixin, DetailView):
         with transaction.atomic():
             email.delete()
             send_rendered_mail(
-                "splitzie/mails/email_removed.html",
+                "splitzie/mails/email_removed.txt",
                 "splitzie/mails/email_removed_subject.txt",
                 [email.email],
                 {

@@ -1,1 +1,1 @@
-[{{ group.name }}] E-mail added
+{% load i18n %}[{{ group.name }}] {% translate 'E-mail added' %}

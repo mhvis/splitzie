@@ -258,3 +258,11 @@ class Settler {
         return new Intl.NumberFormat('nl-NL', {'style': 'currency', 'currency': 'EUR'}).format(cents / 100);
     }
 }
+
+
+/**
+ * (Ugly) workaround to remove orphaned elements when moving through history.
+ */
+document.addEventListener('htmx:historyRestore', (evt) => {
+    document.querySelectorAll('[x-from-template]').forEach((e) => e.remove());
+});

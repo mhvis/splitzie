@@ -3,8 +3,6 @@
 ## Development
 
 * Formatting: `$ black .`
-* Build CSS (requires Tailwind CLI): `tailwindcss -i ./tailwind.css -o ./splitzie/static/style.css --minify`
-  * Add `--watch` to rebuild as needed.
 
 
 ## Database support
