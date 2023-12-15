@@ -74,13 +74,21 @@
             </li>
         {% endfor %}
     </ul>
-    <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true" hx-swap="show:none">
+    <form method="post"
+          action="{% url 'group-edit' code=group.code %}"
+          hx-boost="true"
+          hx-swap="show:none">
+        {% csrf_token %}
         <div class="form-group">
-            <label for="emailField">
-                {% translate 'Add e-mail address' %}
-            </label>
-            <input type="email" maxlength="150" name="email" placeholder="mail@example.com" required autocomplete="off"
-                   id="emailField" class="form-control">
+            <label for="emailField">{% translate 'Add e-mail address' %}</label>
+            <input type="email"
+                   maxlength="150"
+                   name="email"
+                   placeholder="mail@example.com"
+                   required
+                   autocomplete="off"
+                   id="emailField"
+                   class="form-control">
         </div>
         <button type="submit" name="form" value="email-create" class="btn btn-default">
             <span class="glyphicon glyphicon-plus"></span>
