@@ -11,7 +11,7 @@ from splitzie import views
 
 
 def return_request_headers(request: HttpRequest):
-    response = HttpResponse(str(pprint.pformat(dict(request.headers))))
+    response = HttpResponse(pprint.pformat(dict(request.headers)) + "\nis_secure: " + str(request.is_secure()))
     # pprint.pprint(dict(request.headers))
     response.headers["Content-Type"] = "text/plain"
     #
