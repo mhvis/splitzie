@@ -1,11 +1,22 @@
+import pprint
+
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.shortcuts import redirect
+from django.http import HttpResponse, HttpRequest
 from django.urls import path, include
 
 from splitzie import views
+
+
+def return_request_headers(request: HttpRequest):
+    response = HttpResponse(str(pprint.pformat(dict(request.headers))))
+    # pprint.pprint(dict(request.headers))
+    response.headers["Content-Type"] = "text/plain"
+    #
+    return response
+
 
 urlpatterns = i18n_patterns(
     path("", views.IndexView.as_view(), name="index"),
@@ -35,8 +46,10 @@ urlpatterns = i18n_patterns(
     path("admin/", admin.site.urls),
 )
 
-
-urlpatterns += (path("i18n/", include("django.conf.urls.i18n")),)
+urlpatterns += (
+    path("i18n/", include("django.conf.urls.i18n")),
+    path("headers/", return_request_headers),
+)
 
 # Only used in DEBUG mode to serve media files
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
