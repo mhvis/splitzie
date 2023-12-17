@@ -1,11 +1,5 @@
-# Reverse proxy to put in front of the app.
-#
-# Serves the static and media files and forwards requests to the app.
-#
-# This image needs to be built with the parent directory as build context!
-#
-# The first directives should be the same as for the app Dockerfile so
-# that they use the same cache.
+# These first directives should be the same as the app Dockerfile, so that they
+# share the build cache.
 
 FROM python:3.12 AS build
 ENV PYTHONUNBUFFERED=1

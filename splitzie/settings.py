@@ -135,3 +135,8 @@ else:
 
 # The base URL of this deployment, without trailing /.
 BASE_URL = os.environ.get("GS_BASE_URL", "http://localhost:8000")
+
+# If (and only if!) we're behind a proxy that sets X-Forwarded-Proto correctly,
+# enable this setting to make use of the header.
+if "GS_PROXY_SSL" in os.environ:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
