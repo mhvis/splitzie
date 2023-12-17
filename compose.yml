@@ -12,20 +12,18 @@ services:
       GS_DB_HOST: db
       GS_DB_USER: postgres
       GS_DB_NAME: postgres
-    ports:
-      - 8000:8000
     depends_on:
       - db
 
-  static:
-    image: splitzie/static
+  front:
+    # Reverse proxy that sits in front of the app and serves static and media files.
+    #
+    # Not necessary for development.
+    image: splitzie/front
     ports:
-      - 8001:80
-
-  media:
-    image: nginx:1.25
-    ports:
-      - 8002:80
+      - 8000:80
+    depends_on:
+      - app
 
   db:
     image: postgres:16

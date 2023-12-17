@@ -7,14 +7,14 @@ services:
       GS_DB_PASSWORD: postgres
     volumes:
       - .:/usr/src/app
+    ports:
+      - 8000:8000
 
-  static:
-    build: ./nginx/
+  front:
+    build:
+      context: .
+      dockerfile: ./front/Dockerfile
     # We don't need static and media during development, therefore we disable it using `profiles`.
-    profiles:
-      - production
-
-  media:
     profiles:
       - production
 
