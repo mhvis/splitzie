@@ -1,0 +1,30 @@
+services:
+  app:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      GS_DEBUG: "true"
+      GS_DB_PASSWORD: postgres
+    volumes:
+      - .:/usr/src/app
+
+  static:
+    build: ./nginx/
+    # We don't need static and media during development, therefore we disable it using `profiles`.
+    profiles:
+      - production
+
+  media:
+    profiles:
+      - production
+
+  db:
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db1:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+volumes:
+  db1:
