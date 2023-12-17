@@ -1,0 +1,1 @@
+{% load i18n %}[{{ expense.group.name }}] {% translate "New payment" %}

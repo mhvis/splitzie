@@ -1,0 +1,9 @@
+{# @formatter:off #}
+{% load i18n currency %}
+{% blocktrans trimmed with debtor=debtor.name creditor=creditor.name amount=amount|euro %}
+    {{ debtor }} repaid {{ amount }} to {{ creditor }}.
+{% endblocktrans %}
+
+{% include 'splitzie/mails/snippets/view_group.txt' with group=payment.group %}
+
+{% include 'splitzie/mails/snippets/remove_email.txt' with group=payment.group %}

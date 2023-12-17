@@ -4,6 +4,7 @@ import random
 
 import qrcode
 import qrcode.image.svg
+from django.conf import settings
 from django.core.exceptions import BadRequest
 from django.db import transaction
 from django.forms import modelform_factory
@@ -11,6 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.utils.translation import get_language
 from django.views import View
 from django.views.generic import (
     TemplateView,
@@ -74,9 +76,7 @@ class GroupEditView(GroupMixin, DetailView):
     def get_qr_png_uri(self) -> str:
         if not self.object:
             raise ValueError("Group missing")
-        url = self.request.build_absolute_uri(
-            reverse("group", kwargs={"code": self.object.code})
-        )
+        url = settings.BASE_URL + reverse("group", kwargs={"code": self.object.code})
 
         qr = qrcode.QRCode(
             box_size=5,
@@ -127,20 +127,17 @@ class GroupEditView(GroupMixin, DetailView):
 
     def handle_email_create(self):
         form = modelform_factory(LinkedEmail, fields=["email"])(
-            self.request.POST, instance=LinkedEmail(group=self.object)
+            self.request.POST,
+            instance=LinkedEmail(group=self.object, language=get_language()),
         )
         if not form.is_valid():
             raise BadRequest
         with transaction.atomic():
             linked_email = form.save()  # type: LinkedEmail
-            send_rendered_mail(
+            linked_email.send_mail(
                 "splitzie/mails/email_added.txt",
                 "splitzie/mails/email_added_subject.txt",
-                [linked_email.email],
-                {
-                    "group": self.object,
-                    "request": self.request,
-                },
+                {"group": self.object},
             )
 
     def handle_email_delete(self):
@@ -152,14 +149,10 @@ class GroupEditView(GroupMixin, DetailView):
             raise BadRequest
         with transaction.atomic():
             email.delete()
-            send_rendered_mail(
+            email.send_mail(
                 "splitzie/mails/email_removed.txt",
                 "splitzie/mails/email_removed_subject.txt",
-                [email.email],
-                {
-                    "group": self.object,
-                    "request": self.request,
-                },
+                {"group": self.object},
             )
 
     def post(self, request, *args, **kwargs):
@@ -181,6 +174,10 @@ class GroupEditView(GroupMixin, DetailView):
             raise BadRequest
 
         return self.render_to_response(self.get_context_data())
+
+
+class EmailDeleteView(View):
+    pass
 
 
 class GroupSettleView(GroupMixin, DetailView):

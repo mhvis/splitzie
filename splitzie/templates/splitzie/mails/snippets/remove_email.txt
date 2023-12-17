@@ -1,0 +1,2 @@
+{# @formatter:off #}{% load i18n %}{% translate "If you want to stop receiving these e-mail notifications, click the following link to remove your e-mail address" %}:
+{% include 'splitzie/snippets/base_url.html' %}{% url 'email-delete' pk=linked_email.pk code=group.code %}

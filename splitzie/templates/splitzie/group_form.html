@@ -62,6 +62,7 @@
         {% for email in group.emails.all %}
             <li class="list-group-item">
                 {{ email.email }}
+                <small class="text-muted">{% translate 'Language' %}: {{ email.get_language_display }}</small>
                 <form method="post" action="{% url 'group-edit' code=group.code %}" hx-boost="true" hx-swap="show:none"
                       class="pull-right">
                     {% csrf_token %}

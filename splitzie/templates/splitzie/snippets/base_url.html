@@ -1,1 +1,1 @@
-http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}
+{% load settings %}{% settings_value 'BASE_URL' %}

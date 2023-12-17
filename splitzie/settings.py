@@ -120,7 +120,18 @@ MEDIA_URL = os.environ.get("GS_MEDIA_URL", "media/")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+DEFAULT_FROM_EMAIL = os.environ.get("GS_EMAIL_FROM", "webmaster@localhost")
+SERVER_EMAIL = os.environ.get("GS_EMAIL_FROM", "root@localhost")
 if "GS_EMAIL_HOST" in os.environ:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.environ.get("GS_EMAIL_HOST", "localhost")
+    EMAIL_PORT = int(os.environ.get("GS_EMAIL_PORT")) or 25
+    EMAIL_HOST_USER = os.environ.get("GS_EMAIL_HOST_USER", "")
+    EMAIL_HOST_PASSWORD = os.environ.get("GS_EMAIL_HOST_PASSWORD", "")
+    EMAIL_USE_TLS = "GS_EMAIL_USE_TLS" in os.environ
+    EMAIL_USE_SSL = "GS_EMAIL_USE_SSL" in os.environ
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# The base URL of this deployment, without trailing /.
+BASE_URL = os.environ.get("GS_BASE_URL", "http://localhost:8000")

@@ -2,13 +2,17 @@ from decimal import Decimal
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
+from splitzie.mail import send_rendered_mail
 from splitzie.models import Expense, Participant, Entry, Payment
 
 
 class ExpenseForm(forms.ModelForm):
-    type = forms.ChoiceField(choices=[("expense", _("Expense")), ("income", _("Income"))])
+    type = forms.ChoiceField(
+        choices=[("expense", _("Expense")), ("income", _("Income"))]
+    )
     amount = forms.DecimalField(
         max_digits=7, decimal_places=2, min_value=Decimal("0.00")
     )
@@ -17,7 +21,7 @@ class ExpenseForm(forms.ModelForm):
         model = Expense
         fields = ["amount", "payer", "description", "image"]
 
-    def __init__(self, *args, instance=None, **kwargs):
+    def __init__(self, *args, instance: Expense = None, **kwargs):
         super().__init__(*args, instance=instance, **kwargs)
         self.participants = Participant.objects.filter(group=instance.group)
 
@@ -65,14 +69,21 @@ class ExpenseForm(forms.ModelForm):
 
             return amount
 
-        obj.save_with_entries(
-            Entry(
-                payment=obj,
-                participant=p,
-                amount=get_amount(p),
+        with transaction.atomic():
+            obj.save_with_entries(
+                Entry(
+                    payment=obj,
+                    participant=p,
+                    amount=get_amount(p),
+                )
+                for p in self.participants
             )
-            for p in self.participants
-        )
+
+            obj.group.send_mail(
+                "splitzie/mails/expense_created.txt",
+                "splitzie/mails/expense_created_subject.txt",
+                {"expense": obj},
+            )
 
         return obj
 
@@ -108,18 +119,30 @@ class SettleForm(forms.ModelForm):
         if not commit:
             return obj
 
-        obj.save_with_entries(
-            (
-                Entry(
-                    payment=obj,
-                    participant=self.cleaned_data["debtor"],
-                    amount=self.cleaned_data["amount"],
-                ),
-                Entry(
-                    payment=obj,
-                    participant=self.cleaned_data["creditor"],
-                    amount=-self.cleaned_data["amount"],
-                ),
+        with transaction.atomic():
+            obj.save_with_entries(
+                (
+                    Entry(
+                        payment=obj,
+                        participant=self.cleaned_data["debtor"],
+                        amount=self.cleaned_data["amount"],
+                    ),
+                    Entry(
+                        payment=obj,
+                        participant=self.cleaned_data["creditor"],
+                        amount=-self.cleaned_data["amount"],
+                    ),
+                )
             )
-        )
+
+            obj.group.send_mail(
+                "splitzie/mails/repayment_created.txt",
+                "splitzie/mails/repayment_created_subject.txt",
+                {
+                    "payment": obj,
+                    "debtor": self.cleaned_data["debtor"],
+                    "creditor": self.cleaned_data["creditor"],
+                    "amount": self.cleaned_data["amount"],
+                },
+            )
         return obj

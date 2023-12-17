@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: Splitzie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 01:46+0100\n"
-"PO-Revision-Date: 2023-12-15 02:35+0100\n"
+"POT-Creation-Date: 2023-12-17 02:45+0100\n"
+"PO-Revision-Date: 2023-12-17 02:55+0100\n"
 "Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -18,69 +18,77 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: splitzie/forms.py:11 splitzie/templates/splitzie/expense_detail.html:7
+#: splitzie/forms.py:14 splitzie/templates/splitzie/expense_detail.html:7
 #: splitzie/templates/splitzie/expense_form.html:38
 msgid "Expense"
 msgstr "Uitgave"
 
-#: splitzie/forms.py:11 splitzie/templates/splitzie/expense_detail.html:7
+#: splitzie/forms.py:14 splitzie/templates/splitzie/expense_detail.html:7
 #: splitzie/templates/splitzie/expense_form.html:41
 msgid "Income"
 msgstr "Inkomen"
 
-#: splitzie/models.py:20 splitzie/models.py:57
+#: splitzie/models.py:23 splitzie/models.py:88
 msgid "name"
 msgstr "naam"
 
-#: splitzie/models.py:21
+#: splitzie/models.py:23
+msgid "My group"
+msgstr "Mijn groep"
+
+#: splitzie/models.py:25
 msgid "code"
 msgstr "code"
 
-#: splitzie/models.py:22 splitzie/models.py:74
+#: splitzie/models.py:27 splitzie/models.py:105
 msgid "created at"
 msgstr "toegevoegd op"
 
-#: splitzie/models.py:25
+#: splitzie/models.py:30
 msgid "group"
 msgstr "groep"
 
-#: splitzie/models.py:26
+#: splitzie/models.py:31
 msgid "groups"
 msgstr "groepen"
 
-#: splitzie/models.py:42
+#: splitzie/models.py:58
 msgid "e-mail"
 msgstr "e-mail"
 
-#: splitzie/models.py:61
+#: splitzie/models.py:59
+msgid "language"
+msgstr "taal"
+
+#: splitzie/models.py:92
 msgid "participant"
 msgstr "deelnemer"
 
-#: splitzie/models.py:62
+#: splitzie/models.py:93
 msgid "participants"
 msgstr "deelnemers"
 
-#: splitzie/models.py:86
+#: splitzie/models.py:117
 msgid "payment"
 msgstr "betaling"
 
-#: splitzie/models.py:87
+#: splitzie/models.py:118
 msgid "payments"
 msgstr "betalingen"
 
-#: splitzie/models.py:139 splitzie/models.py:196
+#: splitzie/models.py:170 splitzie/models.py:229
 msgid "amount"
 msgstr "bedrag"
 
-#: splitzie/models.py:145
+#: splitzie/models.py:176
 msgid "description"
 msgstr "beschrijving"
 
-#: splitzie/models.py:149
+#: splitzie/models.py:180
 msgid "expense"
 msgstr "uitgave"
 
-#: splitzie/models.py:150
+#: splitzie/models.py:181
 msgid "expenses"
 msgstr "uitgaven"
 
@@ -102,6 +110,7 @@ msgstr "Datum"
 
 #: splitzie/templates/splitzie/expense_detail.html:15
 #: splitzie/templates/splitzie/expense_form.html:83
+#: splitzie/templates/splitzie/mails/expense_created.txt:11
 msgid "Description"
 msgstr "Beschrijving"
 
@@ -125,7 +134,7 @@ msgstr "Verdeling"
 
 #: splitzie/templates/splitzie/expense_detail.html:37
 msgid "Balance change"
-msgstr ""
+msgstr "Balansmutatie"
 
 #: splitzie/templates/splitzie/expense_detail.html:45
 #: splitzie/templates/splitzie/expense_detail.html:46
@@ -179,6 +188,7 @@ msgid "No participants yet"
 msgstr "Nog geen deelnemers"
 
 #: splitzie/templates/splitzie/group.html:19
+#: splitzie/templates/splitzie/mails/expense_created_subject.txt:1
 msgid "New payment"
 msgstr "Nieuwe betaling"
 
@@ -236,7 +246,7 @@ msgid "Participants"
 msgstr "Deelnemers"
 
 #: splitzie/templates/splitzie/group_form.html:31
-#: splitzie/templates/splitzie/group_form.html:71
+#: splitzie/templates/splitzie/group_form.html:72
 #: splitzie/templates/splitzie/index.html:29
 msgid "Remove"
 msgstr "Verwijderen"
@@ -246,7 +256,7 @@ msgid "Add participant"
 msgstr "Deelnemer toevoegen"
 
 #: splitzie/templates/splitzie/group_form.html:49
-#: splitzie/templates/splitzie/group_form.html:87
+#: splitzie/templates/splitzie/group_form.html:96
 msgid "Add"
 msgstr "Toevoegen"
 
@@ -259,38 +269,47 @@ msgid ""
 "Linked e-mails receive a notification when a payment was added. They can "
 "also be used to recover access to the group page when the URL is lost."
 msgstr ""
+"Gelinkte e-mails ontvangen een notificatie wanneer een betaling is "
+"toegevoegd. Ze kunnen ook gebruikt worden om toegang tot de groep te "
+"herstellen als de groep URL verloren is."
 
-#: splitzie/templates/splitzie/group_form.html:80
+#: splitzie/templates/splitzie/group_form.html:65
+msgid "Language"
+msgstr "Taal"
+
+#: splitzie/templates/splitzie/group_form.html:84
 msgid "Add e-mail address"
 msgstr "E-mailadres toevoegen"
 
-#: splitzie/templates/splitzie/group_form.html:92
+#: splitzie/templates/splitzie/group_form.html:101
 msgid "Share"
 msgstr "Groep delen"
 
-#: splitzie/templates/splitzie/group_form.html:94
+#: splitzie/templates/splitzie/group_form.html:103
 msgid ""
 "To share this group with someone, send them the group URL or let them scan "
 "the QR code."
 msgstr ""
+"Om deze groep met iemand te delen, stuur de groep URL of laat hen deze QR "
+"code scannen."
 
-#: splitzie/templates/splitzie/group_form.html:97
+#: splitzie/templates/splitzie/group_form.html:106
 msgid "Group URL"
 msgstr "Groep URL"
 
-#: splitzie/templates/splitzie/group_form.html:110
+#: splitzie/templates/splitzie/group_form.html:119
 msgid "Copied"
 msgstr "Gekopieerd"
 
-#: splitzie/templates/splitzie/group_form.html:111
-#: splitzie/templates/splitzie/group_form.html:115
-#: splitzie/templates/splitzie/group_form.html:117
+#: splitzie/templates/splitzie/group_form.html:120
+#: splitzie/templates/splitzie/group_form.html:124
+#: splitzie/templates/splitzie/group_form.html:126
 msgid "Copy"
-msgstr ""
+msgstr "Kopiëren"
 
-#: splitzie/templates/splitzie/group_form.html:114
+#: splitzie/templates/splitzie/group_form.html:123
 msgid "Could not copy"
-msgstr ""
+msgstr "Kon niet kopiëren"
 
 #: splitzie/templates/splitzie/group_settle.html:7
 msgid "Balances"
@@ -301,6 +320,8 @@ msgid ""
 "Here's a way to settle the balances. Tap an item to fill it in the form "
 "below."
 msgstr ""
+"De balans kan op de volgende manier verrekend worden. Klik op een item in de "
+"lijst om deze in te vullen in het formulier hieronder."
 
 #: splitzie/templates/splitzie/group_settle.html:45
 #, python-format
@@ -308,24 +329,94 @@ msgid ""
 "<strong>%(src)s</strong> pays <strong>%(amount)s</strong> to "
 "<strong>%(target)s</strong>"
 msgstr ""
+"<strong>%(src)s</strong> betaalt <strong>%(amount)s</strong> aan "
+"<strong>%(target)s</strong>"
 
 #: splitzie/templates/splitzie/group_settle.html:58
 msgid "Enter repay"
-msgstr ""
+msgstr "Terugbetaling invoeren"
 
 #: splitzie/templates/splitzie/group_settle.html:60
 msgid "Enter any repayments made using this form."
-msgstr ""
+msgstr "Voer gemaakte terugbetalingen in in dit formulier."
 
 #: splitzie/templates/splitzie/group_settle.html:113
 msgid "Confirm"
+msgstr "Bevestig"
+
+#: splitzie/templates/splitzie/help.html:10
+msgid "How to enter a starting balance?"
+msgstr "Hoe voer ik een startbalans in?"
+
+#: splitzie/templates/splitzie/help.html:12
+msgid ""
+"To enter a starting balance, create a payment with amount 0 and type income. "
+"Enter the starting balances in the division fields, with negative balances "
+"as a negative value."
+msgstr ""
+"Om een startbalans in te voeren, maak een betaling met bedrag 0 euro en type "
+"inkomen. Voer de startbalans in in de verdeelvelden. Gebruik een min (-) "
+"voor negatieve waardes."
+
+#: splitzie/templates/splitzie/help.html:19
+msgid ""
+"Entering a payment in this way will modify the balances exactly as inputted "
+"in the division fields."
+msgstr ""
+"Het maken van een betaling op deze manier verandert de balans exact zoals "
+"ingevoerd in de verdeelvelden."
+
+#: splitzie/templates/splitzie/help.html:27
+msgid "What can you use custom repayments for?"
 msgstr ""
 
-#: splitzie/templates/splitzie/help.html:63
+#: splitzie/templates/splitzie/help.html:29
+msgid ""
+"The repayment form on the Settle page lets you enter arbitrary repayments. "
+"For example, if you owe 2 euros to Bob and 3 euros to Alice, instead of "
+"repaying both of them, you could also give 5 euros to Bob and ask him to pay "
+"the remainder forward."
+msgstr ""
+
+#: splitzie/templates/splitzie/help.html:37
+msgid ""
+"Enter the 5 euros repayment into the form, and the balances will change so "
+"that Bob now owes 3 euros to Alice."
+msgstr ""
+
+#: splitzie/templates/splitzie/help.html:50
+msgid "How are division amounts rounded?"
+msgstr ""
+
+#: splitzie/templates/splitzie/help.html:52
+msgid ""
+"When a payment is divided, the division amounts may need to be rounded. This "
+"means that some participants will get assigned an amount that is one cent "
+"higher than other participants, to make sure that the sum of all divisions "
+"is exactly equal to the total expense amount. The participants who pay this "
+"extra cent are chosen randomly. The difference is always at most one cent."
+msgstr ""
+
+#: splitzie/templates/splitzie/help.html:62
+msgid ""
+"For nerds: you can view the division script in the page source code (/static/"
+"splitzie.js)."
+msgstr ""
+
+#: splitzie/templates/splitzie/help.html:68
+msgid "Question not listed here?"
+msgstr "Staat je vraag hier niet bij?"
+
+#: splitzie/templates/splitzie/help.html:70
+#, python-format
+msgid "Send an e-mail to %(mailto)s."
+msgstr "Stuur een e-mail naar %(mailto)s."
+
+#: splitzie/templates/splitzie/help.html:76
 msgid "About"
 msgstr "Over"
 
-#: splitzie/templates/splitzie/help.html:65
+#: splitzie/templates/splitzie/help.html:78
 msgid ""
 "This app is a hobby project, created because I was annoyed that the widely "
 "used Dutch apps WieBetaaltWat and Groepie do not allow for partial "
@@ -333,32 +424,32 @@ msgid ""
 "link your bank account for settling."
 msgstr ""
 
-#: splitzie/templates/splitzie/help.html:73
+#: splitzie/templates/splitzie/help.html:86
 msgid ""
 "This app will remain online and free as long as it is being used. The source "
 "code may be made open source if there is interest in that."
 msgstr ""
 
-#: splitzie/templates/splitzie/help.html:79
+#: splitzie/templates/splitzie/help.html:92
 #, python-format
 msgid "To contact me, send an e-mail to %(mailto)s."
 msgstr ""
 
-#: splitzie/templates/splitzie/help.html:83
+#: splitzie/templates/splitzie/help.html:96
 msgid "Privacy"
-msgstr ""
+msgstr "Privacy"
 
-#: splitzie/templates/splitzie/help.html:85
+#: splitzie/templates/splitzie/help.html:98
 msgid ""
 "This website does not use tracking and session cookies and does not log IP "
 "addresses. There is no account system."
 msgstr ""
 
-#: splitzie/templates/splitzie/help.html:90
+#: splitzie/templates/splitzie/help.html:103
 msgid "Security"
 msgstr ""
 
-#: splitzie/templates/splitzie/help.html:92
+#: splitzie/templates/splitzie/help.html:105
 msgid ""
 "Anyone with the link of a group can edit the group. If your group link was "
 "stolen, create a new group."
@@ -387,36 +478,72 @@ msgstr "Maak nieuwe groep"
 #: splitzie/templates/splitzie/index.html:42
 #: splitzie/templates/splitzie/index.html:44
 msgid "Get started"
-msgstr ""
-
-#: splitzie/templates/splitzie/mails/email_added.txt:1
-#, python-format
-msgid "Your e-mail address was added to the Splitzie group '%(name)s'."
-msgstr "Je e-mailadres was toegevoegd aan de Splitzie groep '%(name)s'."
+msgstr "Aan de slag"
 
 #: splitzie/templates/splitzie/mails/email_added.txt:3
-#: splitzie/templates/splitzie/mails/email_removed.txt:3
-msgid "View the group here:"
-msgstr "Bekijk de groep hier:"
+#, python-format
+msgid "Your e-mail address was added to the group '%(name)s'."
+msgstr "Je e-mailadres is toegevoegd aan de groep '%(name)s'."
 
-#: splitzie/templates/splitzie/mails/email_added.txt:6
+#: splitzie/templates/splitzie/mails/email_added.txt:7
 msgid ""
 "If this is in error, you can remove your e-mail address by clicking on the "
-"following link:"
+"following link"
 msgstr ""
+"Als dit onterecht is kan je je e-mailadres verwijderen door op onderstaande "
+"link te klikken"
 
 #: splitzie/templates/splitzie/mails/email_added_subject.txt:1
 msgid "E-mail added"
 msgstr "E-mail toegevoegd"
 
-#: splitzie/templates/splitzie/mails/email_removed.txt:1
+#: splitzie/templates/splitzie/mails/email_removed.txt:2
 #, python-format
-msgid "Your e-mail address was removed from the Splitzie group '%(name)s'."
-msgstr ""
+msgid "Your e-mail address was removed from the group '%(name)s'."
+msgstr "Je e-mailadres is verwijderd van de groep '%(name)s'."
 
 #: splitzie/templates/splitzie/mails/email_removed_subject.txt:1
 msgid "E-mail removed"
 msgstr "E-mail verwijderd"
+
+#: splitzie/templates/splitzie/mails/expense_created.txt:4
+#, python-format
+msgid "A new expense was added for %(amount)s paid by %(payer)s."
+msgstr ""
+"Een nieuwe uitgave is toegevoegd met bedrag %(amount)s betaald door "
+"%(payer)s."
+
+#: splitzie/templates/splitzie/mails/expense_created.txt:7
+#, python-format
+msgid "A new income was added for %(amount)s received by %(recipient)s."
+msgstr ""
+"Een nieuw inkomen is toegevoegd met bedrag %(amount)s ontvangen door "
+"%(recipient)s."
+
+#: splitzie/templates/splitzie/mails/expense_created.txt:13
+msgid "View all details here"
+msgstr "Zie alle details hier"
+
+#: splitzie/templates/splitzie/mails/repayment_created.txt:3
+#, python-format
+msgid "%(debtor)s repaid %(amount)s to %(creditor)s."
+msgstr "%(debtor)s heeft %(amount)s terugbetaald aan %(creditor)s."
+
+#: splitzie/templates/splitzie/mails/repayment_created_subject.txt:1
+msgid "New repayment"
+msgstr "Nieuwe terugbetaling"
+
+#: splitzie/templates/splitzie/mails/snippets/remove_email.txt:1
+msgid ""
+"If you want to stop receiving these e-mail notifications, click the "
+"following link to remove your e-mail address"
+msgstr ""
+"Als je deze e-mails niet langer wilt ontvangen, klik op onderstaande link om "
+"je e-mailadres van de groep te verwijderen"
+
+#: splitzie/templates/splitzie/mails/snippets/view_group.txt:1
+msgid "View the group here"
+msgstr "Bekijk de groep hier"
 
 #: splitzie/templates/splitzie/snippets/group_back.html:4
 msgid "Back to group"

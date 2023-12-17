@@ -23,6 +23,11 @@ urlpatterns = i18n_patterns(
                     views.ExpenseDetailView.as_view(),
                     name="expense",
                 ),
+                path(
+                    "deletemail/<int:pk>/",
+                    views.EmailDeleteView.as_view(),
+                    name="email-delete",
+                ),
             ]
         ),
     ),
@@ -31,9 +36,7 @@ urlpatterns = i18n_patterns(
 )
 
 
-urlpatterns += (
-    path("i18n/", include("django.conf.urls.i18n")),
-)
+urlpatterns += (path("i18n/", include("django.conf.urls.i18n")),)
 
 # Only used in DEBUG mode to serve media files
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

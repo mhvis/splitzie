@@ -7,30 +7,37 @@
             <h2>Q&A</h2>
 
             <details style="margin-bottom: 10px;">
-                <summary><strong>How to enter a starting balance?</strong></summary>
+                <summary><strong>{% translate "How to enter a starting balance?" %}</strong></summary>
                 <p>
-                    A way to enter a starting balance is to create a payment
-                    with amount 0 and type income.
-                    Then enter the starting balances in the division fields,
+                    {% blocktrans trimmed %}
+                    To enter a starting balance, create a payment with amount 0 and type income.
+                    Enter the starting balances in the division fields,
                     with negative balances as a negative value.
+                    {% endblocktrans %}
                 </p>
                 <p>
+                    {% blocktrans trimmed %}
                     Entering a payment in this way will modify the balances exactly
                     as inputted in the division fields.
+                    {% endblocktrans %}
                 </p>
             </details>
 
             <details style="margin-bottom: 10px;">
-                <summary><strong>What can you use custom repayments for?</strong></summary>
+                <summary><strong>{% translate "What can you use custom repayments for?" %}</strong></summary>
                 <p>
+                    {% blocktrans trimmed %}
                     The repayment form on the Settle page lets you enter arbitrary repayments.
                     For example, if you owe 2 euros to Bob and 3 euros to Alice,
                     instead of repaying both of them, you could also give 5
                     euros to Bob and ask him to pay the remainder forward.
+                    {% endblocktrans %}
                 </p>
                 <p>
+                    {% blocktrans trimmed %}
                     Enter the 5 euros repayment into the form, and the balances will change
                     so that Bob now owes 3 euros to Alice.
+                    {% endblocktrans %}
                 </p>
             </details>
 
@@ -40,23 +47,29 @@
             {#    </p>#}
 
             <details style="margin-bottom: 10px;">
-                <summary><strong>How are division amounts rounded?</strong></summary>
+                <summary><strong>{% translate "How are division amounts rounded?" %}</strong></summary>
                 <p>
+                    {% blocktrans trimmed %}
                     When a payment is divided, the division amounts may need to be rounded.
                     This means that some participants will get assigned an amount that is one cent
                     higher than other participants, to make sure that the sum of all divisions
                     is exactly equal to the total expense amount.
                     The participants who pay this extra cent are chosen randomly.
                     The difference is always at most one cent.
+                    {% endblocktrans %}
                 </p>
                 <p>
+                    {% blocktrans trimmed %}
                     For nerds: you can view the division script in the page source code (/static/splitzie.js).
+                    {% endblocktrans %}
                 </p>
             </details>
 
-            <h4 style="margin-top: 20px;">Question not listed here?</h4>
+            <h4 style="margin-top: 20px;">{% translate "Question not listed here?" %}</h4>
             <p>
-                Send an e-mail to <a href="mailto:mail@maartenvisscher.nl">mail@maartenvisscher.nl</a>.
+                {% blocktrans trimmed with mailto='<a href="mailto:mail@maartenvisscher.nl" target="_blank">mail@maartenvisscher.nl</a>' %}
+                Send an e-mail to {{ mailto }}.
+                {% endblocktrans %}
             </p>
         </div>
         <div class="col-md-5">

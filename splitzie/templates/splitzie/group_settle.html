@@ -42,10 +42,10 @@
                                     creditor = '{{ move.target.pk }}';
                                     amount = '{{ move.amount|stringformat:".2f" }}';"
                                 class="list-group-item">
-                            {% blocktrans trimmed with src=move.source.name target=move.target.name amount=move.amount %}
+                            {% blocktrans trimmed with src=move.source.name target=move.target.name amount=move.amount|euro %}
                                 <strong>{{ src }}</strong>
                                 pays
-                                <strong>EUR {{ amount }}</strong>
+                                <strong>{{ amount }}</strong>
                                 to
                                 <strong>{{ target }}</strong>
                             {% endblocktrans %}

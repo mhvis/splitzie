@@ -1,0 +1,16 @@
+{# @formatter:off #}
+{% load i18n currency %}
+{% if expense.amount < 0 %}
+{% blocktrans trimmed with amount=expense.abs_amount|euro payer=expense.payer.name %}
+    A new expense was added for {{ amount }} paid by {{ payer }}.
+{% endblocktrans %}{% else %}
+{% blocktrans trimmed with amount=expense.abs_amount|euro recipient=expense.payer.name %}
+    A new income was added for {{ amount }} received by {{ recipient }}.
+{% endblocktrans %}{% endif %}
+
+{% translate "Description" %}: {{ expense.description }}
+
+{% translate "View all details here" %}:
+{% include 'splitzie/snippets/base_url.html' %}{% url 'expense' pk=expense.pk code=expense.group.code %}
+
+{% include 'splitzie/mails/snippets/remove_email.txt' with group=expense.group %}

@@ -6,19 +6,24 @@ import uuid
 from secrets import token_urlsafe
 from typing import Iterable
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser
 from django.db import models, transaction
 from django.db.models.functions import Lower
 from django.urls import reverse
+from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from splitzie.mail import send_rendered_mail
 from splitzie.settle import Settler, SettleEntry
 
 
 class Group(models.Model):
-    name = models.CharField(_("name"), max_length=150, default="Group")
-    code = models.CharField(_("code"), max_length=150, default=token_urlsafe, unique=True)
+    name = models.CharField(_("name"), max_length=150, default=_("My group"))
+    code = models.CharField(
+        _("code"), max_length=150, default=token_urlsafe, unique=True
+    )
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
 
     class Meta:
@@ -33,6 +38,17 @@ class Group(models.Model):
         moves = settler.get_optimal_brute_force()
         return moves
 
+    def send_mail(
+        self, email_template_name: str, subject_template_name: str, context: dict = None
+    ):
+        """Sends a (separate) email to each linked e-mail address.
+
+        See:
+            LinkedEmail.send_mail
+        """
+        for linked_email in self.emails.all():
+            linked_email.send_mail(email_template_name, subject_template_name, context)
+
     def __str__(self):
         return self.name
 
@@ -40,11 +56,26 @@ class Group(models.Model):
 class LinkedEmail(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="emails")
     email = models.EmailField(_("e-mail"))
+    language = models.CharField(_("language"), max_length=5, choices=settings.LANGUAGES)
 
     class Meta:
         constraints = [
             models.UniqueConstraint("group", Lower("email"), name="unique_email")
         ]
+
+    def send_mail(
+        self, email_template_name: str, subject_template_name: str, context: dict = None
+    ):
+        """Sends a mail in the correct language."""
+        if context is None:
+            context = {}
+
+        context["linked_email"] = self
+        with translation.override(self.language):
+            # It's probably better (for testing) to return a list of e-mails instead of directly sending them
+            send_rendered_mail(
+                email_template_name, subject_template_name, [self.email], context
+            )
 
     def __str__(self):
         return self.email
@@ -164,8 +195,10 @@ class Expense(Payment):
         return [
             (
                 e,
-                sign * (e.amount if e.participant != self.payer else e.amount + self.amount)
-            ) for e in self.entries.all()
+                sign
+                * (e.amount if e.participant != self.payer else e.amount + self.amount),
+            )
+            for e in self.entries.all()
         ]
 
 

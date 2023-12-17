@@ -8,10 +8,7 @@ def send_rendered_mail(
     recipient_list: list[str],
     context: dict = None,
 ):
-    # if context is None:
-    #     context = {}
-
-    subject = loader.render_to_string(subject_template_name, context)
-    message = loader.render_to_string(email_template_name, context)
+    subject = loader.render_to_string(subject_template_name, context).strip()
+    message = loader.render_to_string(email_template_name, context).strip()
 
     send_mail(subject, message, None, recipient_list)

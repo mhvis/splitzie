@@ -1,6 +1,7 @@
 import decimal
 
 from django import template
+from django.utils.formats import localize
 
 register = template.Library()
 
@@ -14,7 +15,9 @@ def euro(amount):
     #     return f"-€ {-amount}".replace(".", ",")
     # else:
     #     return mark_safe(f"&nbsp;€ {amount}".replace(".", ","))
-    return f"-€{-amount}" if amount < 0 else f"€{amount}"
+
+    return f"-€{localize(-amount)}" if amount < 0 else f"€{localize(amount)}"
+    # return f"-€{-amount}" if amount < 0 else f"€{amount}"
 
 
 @register.filter

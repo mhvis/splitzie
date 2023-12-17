@@ -1,0 +1,2 @@
+{% load i18n %}{% translate 'View the group here' %}:
+{% include 'splitzie/snippets/base_url.html' %}{{ group.get_absolute_url }}
