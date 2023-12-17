@@ -23,7 +23,7 @@
                             <button class="btn btn-danger btn-sm"
                                     @click="
                                         if (confirm('{% translate 'Are you sure you want to remove this group entry? To add it back later, revisit the group page.' %}')) {
-                                            store.groups.remove(code)
+                                            $store.groups.remove(code)
                                         }">
                                 ×
                                 <span class="sr-only">{% translate 'Remove' %}</span>

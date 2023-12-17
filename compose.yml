@@ -1,32 +1,49 @@
-# Base compose file
-#
-# Use together with compose.override.yml for development.
-# Combine with a custom (e.g. compose.prod.yml) file for production settings.
+# This compose file is purely for development.
 
 name: splitzie
 
 services:
   app:
+    build: .
     image: splitzie/app
+    command: python manage.py runserver 0.0.0.0:8000
     environment:
+      GS_DEBUG: "true"
       GS_DB_HOST: db
       GS_DB_USER: postgres
       GS_DB_NAME: postgres
+      GS_DB_PASSWORD: postgres
     depends_on:
       - db
-
-  front:
-    # Reverse proxy that sits in front of the app and serves static and media files.
-    #
-    # Not necessary for development.
-    image: splitzie/front
+    volumes:
+      - .:/usr/src/app
     ports:
-      - 8000:80
-    depends_on:
-      - app
+      - 8000:8000
+
+  # Reverse proxy that sits in front of the app and serves static and media files.
+  #
+  # Not necessary for development.
+
+  #front:
+  #  image: splitzie/front
+  #  build:
+  #    context: .
+  #    dockerfile: ./front/Dockerfile
+  #  ports:
+  #    - 8000:80
+  #  depends_on:
+  #    - app
 
   db:
     image: postgres:16
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db1:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+volumes:
+  db1:
