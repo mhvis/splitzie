@@ -81,7 +81,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="amountField">repaid <span class="sr-only">amount</span></label>
+                <label for="amountField">{% translate 'repaid' %}</label>
                 <input type="number"
                        step="0.01"
                        id="amountField"
@@ -94,7 +94,7 @@
                        name="amount">
             </div>
             <div class="form-group">
-                <label for="creditorSelect"><span class="sr-only">repay</span> to</label>
+                <label for="creditorSelect">{% translate 'to' %}</label>
                 <select name="creditor"
                         x-model="creditor"
                         class="form-control"

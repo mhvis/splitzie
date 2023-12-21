@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Splitzie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-21 16:39+0100\n"
-"PO-Revision-Date: 2023-12-21 16:41+0100\n"
+"POT-Creation-Date: 2023-12-21 17:06+0100\n"
+"PO-Revision-Date: 2023-12-21 17:06+0100\n"
 "Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -365,6 +365,14 @@ msgstr "Terugbetaling invoeren"
 #: splitzie/templates/splitzie/group_settle.html:60
 msgid "Enter any repayments made using this form."
 msgstr "Voer gemaakte terugbetalingen in in dit formulier."
+
+#: splitzie/templates/splitzie/group_settle.html:84
+msgid "repaid"
+msgstr "heeft terugbetaald"
+
+#: splitzie/templates/splitzie/group_settle.html:97
+msgid "to"
+msgstr "aan"
 
 #: splitzie/templates/splitzie/group_settle.html:113
 msgid "Confirm"
