@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Splitzie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-18 13:20+0100\n"
-"PO-Revision-Date: 2023-12-18 14:45+0100\n"
+"POT-Creation-Date: 2023-12-21 16:39+0100\n"
+"PO-Revision-Date: 2023-12-21 16:41+0100\n"
 "Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -68,6 +68,14 @@ msgstr "deelnemer"
 msgid "participants"
 msgstr "deelnemers"
 
+#: splitzie/models.py:110
+msgid "Expense or income"
+msgstr "Uitgave of inkomen"
+
+#: splitzie/models.py:111
+msgid "Settlement"
+msgstr "Verrekening"
+
 #: splitzie/models.py:117
 msgid "payment"
 msgstr "betaling"
@@ -76,19 +84,19 @@ msgstr "betaling"
 msgid "payments"
 msgstr "betalingen"
 
-#: splitzie/models.py:170 splitzie/models.py:229
+#: splitzie/models.py:177 splitzie/models.py:236
 msgid "amount"
 msgstr "bedrag"
 
-#: splitzie/models.py:176
+#: splitzie/models.py:183
 msgid "description"
 msgstr "beschrijving"
 
-#: splitzie/models.py:180
+#: splitzie/models.py:187
 msgid "expense"
 msgstr "uitgave"
 
-#: splitzie/models.py:181
+#: splitzie/models.py:188
 msgid "expenses"
 msgstr "uitgaven"
 
@@ -105,6 +113,7 @@ msgid "Help"
 msgstr "Hulp"
 
 #: splitzie/templates/splitzie/expense_detail.html:10
+#: splitzie/templates/splitzie/group_table.html:10
 msgid "Date"
 msgstr "Datum"
 
@@ -229,20 +238,24 @@ msgstr ""
 msgid "Payments"
 msgstr "Betalingen"
 
-#: splitzie/templates/splitzie/group.html:66
+#: splitzie/templates/splitzie/group.html:62
+msgid "Table view"
+msgstr "Tabel"
+
+#: splitzie/templates/splitzie/group.html:75
 msgid "paid by"
 msgstr "betaald door"
 
-#: splitzie/templates/splitzie/group.html:67
+#: splitzie/templates/splitzie/group.html:76
 msgid "received by"
 msgstr "ontvangen door"
 
-#: splitzie/templates/splitzie/group.html:81
+#: splitzie/templates/splitzie/group.html:90
 #, python-format
 msgid "%(debtor)s repaid %(amount)s to %(creditor)s"
 msgstr "%(debtor)s heeft %(amount)s terugbetaald aan %(creditor)s"
 
-#: splitzie/templates/splitzie/group.html:92
+#: splitzie/templates/splitzie/group.html:101
 msgid "No payments yet"
 msgstr "Nog geen betalingen"
 
@@ -357,6 +370,14 @@ msgstr "Voer gemaakte terugbetalingen in in dit formulier."
 msgid "Confirm"
 msgstr "Bevestig"
 
+#: splitzie/templates/splitzie/group_table.html:29
+msgid "Details"
+msgstr "Details"
+
+#: splitzie/templates/splitzie/help.html:7
+msgid "Q&A"
+msgstr "V&A"
+
 #: splitzie/templates/splitzie/help.html:10
 msgid "How to enter a starting balance?"
 msgstr "Hoe voer ik een startbalans in?"
@@ -380,26 +401,31 @@ msgstr ""
 "ingevoerd in de verdeelvelden."
 
 #: splitzie/templates/splitzie/help.html:27
-msgid "What can you use custom repayments for?"
-msgstr ""
+msgid "When would you enter a custom repayment amount?"
+msgstr "Wanneer zou je handmatig een terugbetaling willen invoeren?"
 
 #: splitzie/templates/splitzie/help.html:29
 msgid ""
-"The repayment form on the Settle page lets you enter arbitrary repayments. "
-"For example, if you owe 2 euros to Bob and 3 euros to Alice, instead of "
-"repaying both of them, you could also give 5 euros to Bob and ask him to pay "
-"the remainder forward."
+"The repayment form on the settle page lets you enter arbitrary repayment "
+"amounts. For example, if you owe 2 euros to Bob and 3 euros to Alice, "
+"instead of repaying both of them, you could also give 5 euros to Bob and ask "
+"him to pay the remainder forward."
 msgstr ""
+"Op het formulier op de verreken pagina kan je een arbitrair bedrag invoeren. "
+"Als je bijvoorbeeld 2 euro verschuldigd bent aan Bob en 3 euro aan Alice, in "
+"plaats van beiden terug te betalen kan je ook 5 euro aan Bob geven."
 
 #: splitzie/templates/splitzie/help.html:37
 msgid ""
 "Enter the 5 euros repayment into the form, and the balances will change so "
 "that Bob now owes 3 euros to Alice."
 msgstr ""
+"Wanneer je 5 euro invoert in het formulier richting Bob, verandert de balans "
+"zodat Bob nu 3 euro verschuldigd is aan Alice."
 
 #: splitzie/templates/splitzie/help.html:50
 msgid "How are division amounts rounded?"
-msgstr ""
+msgstr "Hoe worden de verdeelbedragen afgerond?"
 
 #: splitzie/templates/splitzie/help.html:52
 msgid ""
@@ -407,66 +433,71 @@ msgid ""
 "means that some participants will get assigned an amount that is one cent "
 "higher than other participants, to make sure that the sum of all divisions "
 "is exactly equal to the total expense amount. The participants who pay this "
-"extra cent are chosen randomly. The difference is always at most one cent."
+"extra cent are chosen randomly."
 msgstr ""
+"Wanneer een bedrag verdeeld wordt kan het voorkomen dat de verdeelbedragen "
+"afgerond moeten worden. Als gevolg hiervan kan het zijn dat bepaalde "
+"deelnemers een cent meer toegewijzen krijgen dan andere deelnemers. Deze "
+"verdeling gebeurt willekeurig."
 
-#: splitzie/templates/splitzie/help.html:62
-msgid ""
-"For nerds: you can view the division script in the page source code (/static/"
-"splitzie.js)."
-msgstr ""
-
-#: splitzie/templates/splitzie/help.html:68
-msgid "Question not listed here?"
-msgstr "Staat je vraag hier niet bij?"
-
-#: splitzie/templates/splitzie/help.html:70
+#: splitzie/templates/splitzie/help.html:61
 #, python-format
-msgid "Send an e-mail to %(mailto)s."
-msgstr "Stuur een e-mail naar %(mailto)s."
+msgid ""
+"The division script can be found <a href=\"%(script_url)s\" "
+"target=\"_blank\">here</a>."
+msgstr ""
+"Het verdeelscript kan <a href=\"%(script_url)s\" target=\"_blank\">hier</a> "
+"gevonden worden."
 
-#: splitzie/templates/splitzie/help.html:76
+#: splitzie/templates/splitzie/help.html:75
 msgid "About"
 msgstr "Over"
 
-#: splitzie/templates/splitzie/help.html:78
+#: splitzie/templates/splitzie/help.html:77
 msgid ""
-"This app is a hobby project, created because I was annoyed that the widely "
-"used Dutch apps WieBetaaltWat and Groepie do not allow for partial "
-"settlements (between a subset of participants), and that they want you to "
-"link your bank account for settling."
+"This app is a hobby project, created to simplify and improve upon the widely "
+"used apps WieBetaaltWat and Groepie."
 msgstr ""
+"Deze app is een hobbyproject, gemaakt als versimpelde en verbeterde versie "
+"van de populaire apps WieBetaaltWat en Groepie."
 
-#: splitzie/templates/splitzie/help.html:86
+#: splitzie/templates/splitzie/help.html:84
+#, python-format
 msgid ""
 "This app will remain online and free as long as it is being used. The source "
-"code may be made open source if there is interest in that."
+"code is available at %(github)s."
 msgstr ""
+"De app blijft online en gratis zolang deze gebruikt wordt. De broncode is "
+"beschikbaar op %(github)s."
 
-#: splitzie/templates/splitzie/help.html:92
+#: splitzie/templates/splitzie/help.html:90
 #, python-format
 msgid "To contact me, send an e-mail to %(mailto)s."
-msgstr ""
+msgstr "Bij vragen, stuur een e-mail naar %(mailto)s."
 
-#: splitzie/templates/splitzie/help.html:96
+#: splitzie/templates/splitzie/help.html:95
 msgid "Privacy"
 msgstr "Privacy"
 
-#: splitzie/templates/splitzie/help.html:98
+#: splitzie/templates/splitzie/help.html:97
 msgid ""
 "This website does not use tracking and session cookies and does not log IP "
-"addresses. There is no account system."
+"addresses."
 msgstr ""
+"Deze website gebruikt geen tracking en sessie cookies en IP adressen worden "
+"niet opgeslagen."
+
+#: splitzie/templates/splitzie/help.html:101
+msgid "Security"
+msgstr "Veiligheid"
 
 #: splitzie/templates/splitzie/help.html:103
-msgid "Security"
-msgstr ""
-
-#: splitzie/templates/splitzie/help.html:105
 msgid ""
-"Anyone with the link of a group can edit the group. If your group link was "
+"Anyone with the link of a group can edit the group. If your group link is "
 "stolen, create a new group."
 msgstr ""
+"Iedereen die in het bezit is van de group URL kan de groep bewerken. Als de "
+"groep URL gestolen is, maak een nieuwe groep aan."
 
 #: splitzie/templates/splitzie/index.html:6
 msgid "Easily divide group expenses over all participants. No account needed."
@@ -561,3 +592,13 @@ msgstr "Bekijk de groep hier"
 #: splitzie/templates/splitzie/snippets/group_back.html:4
 msgid "Back to group"
 msgstr "Terug naar de groep"
+
+#~ msgid "Repayment"
+#~ msgstr "Terugbetaling"
+
+#~ msgid "Question not listed here?"
+#~ msgstr "Staat je vraag hier niet bij?"
+
+#, python-format
+#~ msgid "Send an e-mail to %(mailto)s."
+#~ msgstr "Stuur een e-mail naar %(mailto)s."

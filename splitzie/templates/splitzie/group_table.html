@@ -28,7 +28,7 @@
                                hx-boost="true">
                                 {% translate 'Details' %}
                             </a>
-                        {% else %}{% translate 'Repayment' %}{% endif %}
+                        {% else %}{{ payment.get_type_display }}{% endif %}
                     </td>
 
                     {#                    <th scope="row">{{ payment.get_type_display }}</th>#}
