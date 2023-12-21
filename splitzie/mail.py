@@ -12,6 +12,6 @@ def send_rendered_mail(
     message = loader.render_to_string(email_template_name, context).strip()
 
     email = EmailMessage(
-        subject, message, to=[recipient_list], headers={"X-Entity-Ref-ID": "null"}
+        subject, message, to=recipient_list, headers={"X-Entity-Ref-ID": "null"}
     )
     email.send()
