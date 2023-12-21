@@ -1,0 +1,44 @@
+{% extends "splitzie/base.html" %}
+{% load currency i18n %}
+
+{% block content %}
+    {% include 'splitzie/snippets/group_back.html' %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">{% translate 'Date' %}</th>
+                {#                <th scope="col">{% translate 'Type' %}</th>#}
+                <th scope="row">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                    <span class="sr-only">Info</span>
+                </th>
+                {% for p in group.participants.all %}
+                    <th scope="col" class="text-right">{{ p.name }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for payment in group.payments.all %}
+                <tr>
+                    <th scope="row">{{ payment.created_at|date:"SHORT_DATE_FORMAT" }}</th>
+                    <td>
+                        {% if payment.type == "expense" %}
+                            <a href="{{ payment.expense.get_absolute_url }}"
+                               hx-boost="true">
+                                {% translate 'Details' %}
+                            </a>
+                        {% else %}{% translate 'Repayment' %}{% endif %}
+                    </td>
+
+                    {#                    <th scope="row">{{ payment.get_type_display }}</th>#}
+                    {% for p, entry in payment.entries_for_all %}
+                        <td class="text-right">{% if entry is None %}–{% else %}
+                            {% if entry.amount > 0 %}+{% endif %}{{ entry.amount|euro }}{% endif %}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

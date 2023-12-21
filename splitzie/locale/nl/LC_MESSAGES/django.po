@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Splitzie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-17 02:45+0100\n"
-"PO-Revision-Date: 2023-12-17 03:59+0100\n"
+"POT-Creation-Date: 2023-12-18 13:20+0100\n"
+"PO-Revision-Date: 2023-12-18 14:45+0100\n"
 "Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -229,7 +229,20 @@ msgstr ""
 msgid "Payments"
 msgstr "Betalingen"
 
-#: splitzie/templates/splitzie/group.html:86
+#: splitzie/templates/splitzie/group.html:66
+msgid "paid by"
+msgstr "betaald door"
+
+#: splitzie/templates/splitzie/group.html:67
+msgid "received by"
+msgstr "ontvangen door"
+
+#: splitzie/templates/splitzie/group.html:81
+#, python-format
+msgid "%(debtor)s repaid %(amount)s to %(creditor)s"
+msgstr "%(debtor)s heeft %(amount)s terugbetaald aan %(creditor)s"
+
+#: splitzie/templates/splitzie/group.html:92
 msgid "No payments yet"
 msgstr "Nog geen betalingen"
 

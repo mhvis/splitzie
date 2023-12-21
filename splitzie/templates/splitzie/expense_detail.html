@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-sm-2"><strong>{% translate 'Date' %}</strong></div>
-        <div class="col-sm-10"><p>{{ expense.created_at|date:"SHORT_DATETIME_FORMAT" }}</p></div>
+        <div class="col-sm-10"><p>{{ expense.created_at|date:"DATE_FORMAT" }}</p></div>
     </div>
 
     <div class="row">

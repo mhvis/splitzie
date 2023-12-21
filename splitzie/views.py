@@ -40,6 +40,10 @@ class GroupView(GroupMixin, DetailView):
     template_name = "splitzie/group.html"
 
 
+class GroupTableView(GroupMixin, DetailView):
+    template_name = "splitzie/group_table.html"
+
+
 class GroupCreateView(View):
     def post(self, request, *args, **kwargs):
         group = Group.objects.create()

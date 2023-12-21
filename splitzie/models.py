@@ -107,8 +107,8 @@ class Payment(models.Model):
     type = models.CharField(
         max_length=10,
         choices=[
-            ("expense", "Expense or income"),
-            ("settle", "Settlement between participants"),
+            ("expense", _("Expense or income")),
+            ("settle", _("Settlement")),
         ],
     )
 
@@ -155,6 +155,13 @@ class Payment(models.Model):
             return entries[0].participant, entries[1].participant, entries[0].amount
         else:
             return entries[1].participant, entries[0].participant, entries[1].amount
+
+    def entries_for_all(self):
+        """Returns for each group participant the payment entry, or None when there's no entry."""
+        for participant in self.group.participants.all():
+            yield participant, Entry.objects.filter(
+                payment=self, participant=participant
+            ).first()
 
 
 def expense_image_path(instance, filename):

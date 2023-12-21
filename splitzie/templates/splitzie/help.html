@@ -7,7 +7,7 @@
             <h2>Q&A</h2>
 
             <details style="margin-bottom: 10px;">
-                <summary><strong>{% translate "How to enter a starting balance?" %}</strong></summary>
+                <summary><strong>{% translate 'How to enter a starting balance?' %}</strong></summary>
                 <p>
                     {% blocktrans trimmed %}
                     To enter a starting balance, create a payment with amount 0 and type income.
@@ -24,10 +24,10 @@
             </details>
 
             <details style="margin-bottom: 10px;">
-                <summary><strong>{% translate "What can you use custom repayments for?" %}</strong></summary>
+                <summary><strong>{% translate 'When would you enter a custom repayment amount?' %}</strong></summary>
                 <p>
                     {% blocktrans trimmed %}
-                    The repayment form on the Settle page lets you enter arbitrary repayments.
+                    The repayment form on the settle page lets you enter arbitrary repayment amounts.
                     For example, if you owe 2 euros to Bob and 3 euros to Alice,
                     instead of repaying both of them, you could also give 5
                     euros to Bob and ask him to pay the remainder forward.
@@ -47,7 +47,7 @@
             {#    </p>#}
 
             <details style="margin-bottom: 10px;">
-                <summary><strong>{% translate "How are division amounts rounded?" %}</strong></summary>
+                <summary><strong>{% translate 'How are division amounts rounded?' %}</strong></summary>
                 <p>
                     {% blocktrans trimmed %}
                     When a payment is divided, the division amounts may need to be rounded.
@@ -55,37 +55,35 @@
                     higher than other participants, to make sure that the sum of all divisions
                     is exactly equal to the total expense amount.
                     The participants who pay this extra cent are chosen randomly.
-                    The difference is always at most one cent.
                     {% endblocktrans %}
                 </p>
                 <p>
-                    {% blocktrans trimmed %}
-                    For nerds: you can view the division script in the page source code (/static/splitzie.js).
+                    {% blocktrans trimmed with script_url='https://github.com/mhvis/splitzie/blob/ad0122826d0c020d5fb296618f763f73a9e77d25/splitzie/static/splitzie.js#L153' %}
+                        The division script can be found <a href="{{ script_url }}" target="_blank">here</a>.
                     {% endblocktrans %}
                 </p>
             </details>
 
-            <h4 style="margin-top: 20px;">{% translate "Question not listed here?" %}</h4>
-            <p>
-                {% blocktrans trimmed with mailto='<a href="mailto:mail@maartenvisscher.nl" target="_blank">mail@maartenvisscher.nl</a>' %}
-                Send an e-mail to {{ mailto }}.
-                {% endblocktrans %}
-            </p>
+{#            <h4 style="margin-top: 20px;">{% translate "Question not listed here?" %}</h4>#}
+{#            <p>#}
+{#                {% blocktrans trimmed with mailto='<a href="mailto:mail@maartenvisscher.nl" target="_blank">mail@maartenvisscher.nl</a>' %}#}
+{#                Send an e-mail to {{ mailto }}.#}
+{#                {% endblocktrans %}#}
+{#            </p>#}
         </div>
         <div class="col-md-5">
             <h2>{% translate 'About' %}</h2>
             <p>
                 {% blocktrans trimmed %}
-                    This app is a hobby project, created because I was annoyed that the
-                    widely used Dutch apps WieBetaaltWat and Groepie do not allow for
-                    partial settlements (between a subset of participants),
-                    and that they want you to link your bank account for settling.
+                    This app is a hobby project, created
+                    to simplify and improve upon the widely used apps
+                    WieBetaaltWat and Groepie.
                 {% endblocktrans %}
             </p>
             <p>
-                {% blocktrans trimmed %}
-                    This app will remain online and free as long as it is being used. The source code may be made
-                    open source if there is interest in that.
+                {% blocktrans trimmed with github='<a href="https://github.com/mhvis/splitzie" target="_blank">GitHub</a>' %}
+                    This app will remain online and free as long as it is being used.
+                    The source code is available at {{ github }}.
                 {% endblocktrans %}
             </p>
             <p>
@@ -93,18 +91,18 @@
                     To contact me, send an e-mail to {{ mailto }}.
                 {% endblocktrans %}
             </p>
+{#            <p><em>{% translate 'Last updated' %}: TODO</em></p>#}
             <h3>{% translate 'Privacy' %}</h3>
             <p>
                 {% blocktrans trimmed %}
                     This website does not use tracking and session cookies and does not log IP addresses.
-                    There is no account system.
                 {% endblocktrans %}
             </p>
             <h3>{% translate 'Security' %}</h3>
             <p>
                 {% blocktrans trimmed %}
                     Anyone with the link of a group can edit the group.
-                    If your group link was stolen, create a new group.
+                    If your group link is stolen, create a new group.
                 {% endblocktrans %}
             </p>
         </div>

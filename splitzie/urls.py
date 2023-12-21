@@ -11,7 +11,11 @@ from splitzie import views
 
 
 def return_request_headers(request: HttpRequest):
-    response = HttpResponse(pprint.pformat(dict(request.headers)) + "\nis_secure: " + str(request.is_secure()))
+    response = HttpResponse(
+        pprint.pformat(dict(request.headers))
+        + "\nis_secure: "
+        + str(request.is_secure())
+    )
     # pprint.pprint(dict(request.headers))
     response.headers["Content-Type"] = "text/plain"
     #
@@ -39,6 +43,7 @@ urlpatterns = i18n_patterns(
                     views.EmailDeleteView.as_view(),
                     name="email-delete",
                 ),
+                path("table/", views.GroupTableView.as_view(), name="group-table"),
             ]
         ),
     ),

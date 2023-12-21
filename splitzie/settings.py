@@ -103,6 +103,7 @@ LANGUAGES = [
     ("en", _("English")),
     ("nl", _("Dutch")),
 ]
+LANGUAGE_COOKIE_AGE = 60 * 60 * 24 * 365
 
 TIME_ZONE = "Europe/Amsterdam"
 USE_I18N = True
@@ -140,3 +141,7 @@ BASE_URL = os.environ.get("GS_BASE_URL", "http://localhost:8000")
 # enable this setting to make use of the header.
 if "GS_PROXY_SSL" in os.environ:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# TODO
+BUILD_DATE = ""
+BUILD_COMMIT = ""

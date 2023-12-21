@@ -54,16 +54,27 @@
 
     <h2>{% translate "Payments" %}</h2>
 
+    <p>
+        <a href="{% url 'group-table' code=group.code %}"
+           class="btn btn-default"
+           hx-boost="true">
+            <span class="glyphicon glyphicon-th"></span>
+            {% translate 'Table view' %}
+        </a>
+    </p>
+
     <div class="list-group">
         {% for p in group.payments.all %}
             {% if p.type == "expense" %}
                 {% with e=p.expense %}
                     <a href="{{ e.get_absolute_url }}" class="list-group-item" hx-boost="true">
-                        <em>{{ e.created_at|date:"SHORT_DATE_FORMAT" }}</em>
+                        <em class="text-muted">{{ e.created_at|date:"DATE_FORMAT" }}</em>
                         <p class="list-group-item-text">
                             <strong>
-                                {{ e.abs_amount|euro }} {% if e.is_expense %}paid{% else %}received{% endif %}
-                                by {{ e.payer }}
+                                {{ e.abs_amount|euro }}
+                                {% if e.is_expense %}{% translate 'paid by' %}{% else %}
+                                    {% translate 'received by' %}{% endif %}
+                                {{ e.payer }}
                             </strong>
                         </p>
                         <p class="list-group-item-text">{{ e.description }}</p>
@@ -72,10 +83,14 @@
             {% elif p.type == "settle" %}
                 {% with t=p.get_transfer %}
                     <span class="list-group-item disabled" style="cursor: default;">
-                        <em>{{ p.created_at|date:"SHORT_DATE_FORMAT" }}</em>
+                        <em class="text-muted">{{ p.created_at|date:"DATE_FORMAT" }}</em>
                         <p class="list-group-item-text">
                             <span class="glyphicon glyphicon-transfer"></span>
-                            <strong>{{ t.0.name }} repaid {{ t.2|euro }} to {{ t.1.name }}</strong>
+                            <strong>
+                                {% blocktrans trimmed with debtor=t.0.name creditor=t.1.name amount=t.2|euro %}
+                                {{ debtor }} repaid {{ amount }} to {{ creditor }}
+                                {% endblocktrans %}
+                            </strong>
                         </p>
                     </span>
                 {% endwith %}
