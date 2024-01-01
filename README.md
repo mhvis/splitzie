@@ -21,6 +21,11 @@ Instead currency is stored as floats, leading to rounding errors.
 * JavaScript: Google Style Guide (https://google.github.io/styleguide/jsguide.html)
 
 
+## To do
+
+* GET page for immediate delete of linked e-mail.
+* Recover groups form.
+
 ## Future work (in no particular order)
 
 * Progressive Enhancement: gracefully degrade when JavaScript is disabled.

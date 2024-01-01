@@ -15,7 +15,7 @@ class EmailInline(admin.TabularInline):
 class GroupAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     ordering = ("name",)
-    readonly_fields = ("created_at",)
+    readonly_fields = ("code", "created_at",)
     inlines = [ParticipantInline, EmailInline]
 
 

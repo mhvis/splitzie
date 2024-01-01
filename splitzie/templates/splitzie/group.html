@@ -54,7 +54,7 @@
 
     <h2>{% translate "Payments" %}</h2>
 
-    <p>
+    <p style="margin-bottom: 20px;">{# Same margin as list-group #}
         <a href="{% url 'group-table' code=group.code %}"
            class="btn btn-default"
            hx-boost="true">
@@ -63,27 +63,38 @@
         </a>
     </p>
 
+    {% regroup group.payments.all by created_at|date:'F Y' as payments %}
+
+    {% for month, payment_list in payments %}
+    <h4>{{ month|capfirst }}</h4>
+
     <div class="list-group">
-        {% for p in group.payments.all %}
+        {% for p in payment_list %}
             {% if p.type == "expense" %}
                 {% with e=p.expense %}
-                    <a href="{{ e.get_absolute_url }}" class="list-group-item" hx-boost="true">
-                        <em class="text-muted">{{ e.created_at|date:"DATE_FORMAT" }}</em>
-                        <p class="list-group-item-text">
-                            <strong>
-                                {{ e.abs_amount|euro }}
-                                {% if e.is_expense %}{% translate 'paid by' %}{% else %}
-                                    {% translate 'received by' %}{% endif %}
-                                {{ e.payer }}
-                            </strong>
-                        </p>
-                        <p class="list-group-item-text">{{ e.description }}</p>
+                    <a href="{{ e.get_absolute_url }}"
+                       class="list-group-item"
+                       style="display: flex;"
+                       hx-boost="true">
+                        <span class="h4" style="margin-right: 15px;">{{ p.created_at.day }}</span>
+                        <div>
+                            <p class="list-group-item-text">
+                                <strong>
+                                    {{ e.abs_amount|euro }}
+                                    {% if e.is_expense %}{% translate 'paid by' %}{% else %}
+                                        {% translate 'received by' %}{% endif %}
+                                    {{ e.payer }}
+                                </strong>
+                            </p>
+                            <p class="list-group-item-text">{{ e.description }}</p>
+                        </div>
                     </a>
                 {% endwith %}
             {% elif p.type == "settle" %}
                 {% with t=p.get_transfer %}
-                    <span class="list-group-item disabled" style="cursor: default;">
-                        <em class="text-muted">{{ p.created_at|date:"DATE_FORMAT" }}</em>
+                    <span class="list-group-item disabled"
+                          style="cursor: default; display: flex;">
+                        <span class="h4" style="margin: 0 15px 0 0;">{{ p.created_at.day }}</span>
                         <p class="list-group-item-text">
                             <span class="glyphicon glyphicon-transfer"></span>
                             <strong>
@@ -97,6 +108,7 @@
             {% endif %}
         {% endfor %}
     </div>
+    {% endfor %}
     {% if not group.payments.exists %}
         <p class="text-muted">{% translate "No payments yet" %}</p>
     {% endif %}
