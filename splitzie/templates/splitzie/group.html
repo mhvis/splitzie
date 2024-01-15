@@ -92,7 +92,7 @@
                 {% endwith %}
             {% elif p.type == "settle" %}
                 {% with t=p.get_transfer %}
-                    <span class="list-group-item disabled"
+                    <span class="list-group-item list-group-item-success"
                           style="cursor: default; display: flex;">
                         <span class="h4" style="margin: 0 15px 0 0;">{{ p.created_at.day }}</span>
                         <p class="list-group-item-text">
